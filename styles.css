@@ -1,0 +1,66 @@
+
+/* CSS for Streamlit app */
+
+/* Title */
+.title {
+    font-size: 36px;
+    color: #333333;
+    margin-bottom: 30px;
+}
+
+/* Text area */
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    resize: none;
+}
+
+/* Button */
+button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Result display */
+.result {
+    margin-top: 20px;
+}
+
+/* Positive sentiment */
+.positive {
+    color: #008000; /* Green */
+}
+
+/* Negative sentiment */
+.negative {
+    color: #ff0000; /* Red */
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f2f2f2;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+}

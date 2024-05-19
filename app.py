@@ -94,7 +94,7 @@ if st.sidebar.button("Export Report"):
         # Provide a download link for the exported file
         csv = df.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-        href = f'<a href="data:file/csv;base64,{b64}" download="{export_filename}">Click here to download the report</a>'
+        href = f'<a href="data:text/csv;base64,{b64}" download="{export_filename}">Click here to download the report</a>'
         st.markdown(href, unsafe_allow_html=True)
     else:
         st.sidebar.warning("No data available for the selected date range.")

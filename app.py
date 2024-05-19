@@ -45,9 +45,7 @@ def predict_sentiment(text):
 
 # Function to export report
 def export_report(df, start_date, end_date):
-    local_timezone = pytz.timezone('Asia/Kuala_Lumpur')
-    current_time = datetime.now(local_timezone)
-    filename = f"sentiment_report_{current_time.strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+    filename = f"sentiment_report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
     df.to_csv(filename, index=False)
     return filename
 
@@ -79,7 +77,8 @@ st.sidebar.title("Report Export")
 start_date = st.sidebar.date_input("Start Date")
 end_date = st.sidebar.date_input("End Date")
 max_date = datetime.now() - timedelta(days=30)
-start_date = max(start_date, max_date.replace(hour=0, minute=0, second=0, microsecond=0))  # Set time to midnight for comparison
+max_date = max_date.replace(hour=0, minute=0, second=0, microsecond=0)  # Set time to midnight for comparison
+start_date = max(start_date, max_date)
 end_date = min(end_date, datetime.now())
 if st.sidebar.button("Export Report"):
     # Example DataFrame

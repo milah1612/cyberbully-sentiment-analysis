@@ -77,7 +77,6 @@ elif selected_tab == "Positive":
 else:
     st.write("Negative sentiment analysis will be displayed here.")
 
-
 if st.button("Analyze Sentiment"):
     if user_input:
         try:

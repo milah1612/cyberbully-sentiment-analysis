@@ -70,17 +70,8 @@ user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment 
 # Add tabs for "All", "Positive", and "Negative" sentiments
 tabs = ["All", "Positive", "Negative"]
 selected_tab = st.radio("Select sentiment:", tabs)
-
-# Display corresponding content based on selected tab
-if selected_tab == "All":
-    st.write("All tweets will be displayed here.")
-elif selected_tab == "Positive":
-    st.write("Positive sentiment analysis will be displayed here.")
-else:
-    st.write("Negative sentiment analysis will be displayed here.") 
     
-
-if st.button("Analyze Sentiment"):
+if st.sidebar.button("Analyze Sentiment"):
     if user_input:
         try:
             # Perform language detection
@@ -101,4 +92,15 @@ if st.button("Analyze Sentiment"):
         except Exception as e:
             st.write("An error occurred. Please try again.")
     else:
-        st.write("Please enter some text.")
+        st.write("Please enter some text.")  
+
+# Navigation tabs for "All", "Positive", and "Negative" sentiments
+selected_tab = st.sidebar.selectbox("Select sentiment:", ["All", "Positive", "Negative"])
+
+# Display corresponding content based on selected tab
+if selected_tab == "All":
+    st.write("All tweets will be displayed here.")
+elif selected_tab == "Positive":
+    st.write("Positive sentiment analysis will be displayed here.")
+else:
+    st.write("Negative sentiment analysis will be displayed here.")

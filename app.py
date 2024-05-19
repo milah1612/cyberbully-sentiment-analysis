@@ -66,6 +66,7 @@ if st.button("Analyze Sentiment"):
         try:
             # Perform language detection
             detected_language = detect(user_input)
+            st.write(f"Detected Language: {detected_language}")  # Debug information
             if detected_language == 'en':  # Proceed if the detected language is English
                 prediction = predict_sentiment(user_input)
                 processed_text = preprocess_text(user_input)
@@ -80,7 +81,8 @@ if st.button("Analyze Sentiment"):
                     st.write(f"Sentiment: {prediction}")
             else:
                 st.write("Please enter text in English.")
-        except:
-            st.write("Error occurred during language detection. Please try again.")
+        except Exception as e:
+            st.write(f"Error occurred during language detection: {str(e)}")
+            st.write("Please try again or enter text in English.")
     else:
         st.write("Please enter some text.")

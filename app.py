@@ -3,47 +3,14 @@
 
 # In[ ]:
 
-import re
-import joblib
 import streamlit as st
-import contractions  
+from transformers import pipeline
 import pandas as pd
-from datetime import datetime, timedelta 
-import pytz  
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS 
+from datetime import datetime, timedelta
+import pytz
 
-# Download NLTK resources
-import nltk
-nltk.download('stopwords')
-nltk.download('wordnet') 
-
-
-def preprocess_text(text):
-    text = text.lower()
-    text = re.sub(r"https?\S+|www\.\S+|@[^\s]+|[^\w\s]|[\u0080-\uffff]", "", text)
-    text = contractions.fix(text)
-    words = text.split()
-    words = [word for word in words if word not in stopwords.words('english') and word not in ENGLISH_STOP_WORDS]
-    lemmatizer = WordNetLemmatizer()
-    words = [lemmatizer.lemmatize(word) for word in words]
-    processed_text = ' '.join(words)
-    return processed_text
-
-# Load SVM model and TF-IDF vectorizer
-svm_model = joblib.load('svm_model.pkl')
-tfidf_vectorizer = joblib.load('tfidf_vectorizer.pkl')
-
-def preprocess_and_vectorize(text):
-    processed_text = preprocess_text(text)
-    text_vector = tfidf_vectorizer.transform([processed_text])
-    return text_vector
-
-def predict_sentiment(text):
-    text_vector = preprocess_and_vectorize(text)
-    prediction = svm_model.predict(text_vector)
-    return prediction[0]
+# Load pretrained sentiment analysis pipeline
+sentiment_pipeline = pipeline("sentiment-analysis")
 
 # Streamlit app
 st.set_page_config(page_title="Twitter Sentiment Analysis", page_icon=":bird:", layout="wide")
@@ -72,10 +39,8 @@ user_input = st.text_area("Enter the tweet for sentiment analysis:")
 
 if st.button("Analyze Sentiment"):
     if user_input:
-        prediction = predict_sentiment(user_input)
-        processed_text = preprocess_text(user_input)
-        sentiment = "Positive" if prediction == 1 else "Negative"
-        st.write(f"**Processed Text:** {processed_text}")
+        result = sentiment_pipeline(user_input)
+        sentiment = result[0]['label']
         st.write(f"**Sentiment:** {sentiment}")
         
         myt = pytz.timezone('Asia/Kuala_Lumpur')
@@ -86,7 +51,6 @@ if st.button("Analyze Sentiment"):
 
         st.session_state.results.append({
             'User Input': user_input,
-            'Processed Text': processed_text,
             'Sentiment': sentiment,
             'Timestamp': timestamp
         })

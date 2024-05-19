@@ -71,4 +71,12 @@ img.twitter_icon {
     top: 100px;
     left: 100px;
     z-index: 9999; /* Ensure the icon is on top of other elements */
+} 
+
+/* Main content area navigation tabs */
+.main-content .sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

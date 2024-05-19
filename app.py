@@ -66,20 +66,21 @@ if st.button("Analyze Sentiment"):
 
 # Sidebar for report export
 st.sidebar.title("Report Export")
-start_date = st.sidebar.date_input("Start Date")
-end_date = st.sidebar.date_input("End Date")
+start_date_input = st.sidebar.date_input("Start Date")
+end_date_input = st.sidebar.date_input("End Date")
 max_date = datetime.now() - timedelta(days=30)
-start_date = max(start_date, max_date) if start_date else max_date
-end_date = min(end_date, datetime.now())
 
-# Convert start_date and end_date to datetime objects
-start_date = datetime.combine(start_date, datetime.min.time())
-end_date = datetime.combine(end_date, datetime.max.time())
+# Ensure start_date_input is a datetime object
+start_date = datetime.combine(start_date_input, datetime.min.time()) if start_date_input else max_date
+end_date = datetime.combine(end_date_input, datetime.max.time()) if end_date_input else datetime.now()
+
+if start_date_input and start_date > max_date:
+    start_date = max_date
 
 if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
-            'Sentiment': ['Positive', 'Negative', 'Neutral'],
+            'Sentiment': ['Positive', 'Negative'],
             'Date': [datetime.now(), datetime.now(), datetime.now()]}
     df = pd.DataFrame(data)
     df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]

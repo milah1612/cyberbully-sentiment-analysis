@@ -95,7 +95,8 @@ if st.sidebar.button("Analyze Sentiment"):
         st.write("Please enter some text.")  
 
 # Navigation tabs for "All", "Positive", and "Negative" sentiments
-selected_tab = st.sidebar.selectbox("Select sentiment:", ["All", "Positive", "Negative"])
+tabs = ["All", "Positive", "Negative"]
+selected_tab = st.selectbox("Select sentiment:", tabs)
 
 # Display corresponding content based on selected tab
 if selected_tab == "All":

@@ -10,13 +10,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io 
-from langdetect import detect  
+from langdetect import detect   
+from collections import Counter
+from wordcloud import WordCloud 
+
 
 
 # Function to load CSS file
 def local_css(file_path):
     with io.open(file_path, "r") as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)  
+
 
 # Load the CSS file
 local_css("styles.css")  # Update with the actual filename    
@@ -54,7 +58,13 @@ def predict_sentiment(text):
 
 # Function to check if text contains only English characters
 def is_english(text):
-    return all(ord(char) < 128 for char in text)
+    return all(ord(char) < 128 for char in text) 
+
+
+# Initialize session state
+if 'tweets' not in st.session_state:
+    st.session_state.tweets = []  
+    
 
 # Streamlit app
 # Sidebar configuration
@@ -94,20 +104,33 @@ if st.sidebar.button("Analyze Sentiment"):
         st.sidebar.write("Please enter some text.") 
 
 
-# Define navigation tabs
-tabs = ["All", "Positive", "Negative"]
-selected_tab = st.session_state.get("selected_tab", tabs[0])  # Initialize session state
+# Add tabs for "All", "Positive", and "Negative" sentiments
+tabs = st.tabs(["All", "Positive", "Negative"])
 
-# Render navigation tabs
-tab_html = ""
-for tab in tabs:
-    tab_html += f'<li class="tab-item {"active" if tab == selected_tab else ""}" onclick="location.href=`#{tab.lower()}`">{tab}</li>'
-st.markdown(f'<ul class="tabs">{tab_html}</ul>', unsafe_allow_html=True)
+with tabs[0]:
+    st.write("### All Tweets")
+    if st.session_state.tweets:
+        df_all = pd.DataFrame(st.session_state.tweets)
+        st.write(df_all)
+    else:
+        st.write("No tweets to display.")
+        
+with tabs[1]:
+    st.write("### Positive Sentiment Analysis")
+    if st.session_state.tweets:
+        df_positive = pd.DataFrame([tweet for tweet in st.session_state.tweets if tweet["Sentiment"] == "Positive"])
+        st.write(df_positive)
 
-# Display corresponding content based on selected tab
-if selected_tab == "All":
-    st.write("All tweets will be displayed here.")
-elif selected_tab == "Positive":
-    st.write("Positive sentiment analysis will be displayed here.")
-else:
-    st.write("Negative sentiment analysis will be displayed here.")
+        if not df_positive.empty:
+            # Pie chart of total positive words
+            st.write("#### Pie Chart of Positive Words")
+            all_words = ' '.join(df_positive['Processed Text'])
+            word_counter = Counter(all_words.split())
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_counter)
+            st.image(wordcloud.to_array())
+
+            # Bar plot of top occurring words
+            st.write("#### Bar Plot of Top Occurring Words")
+            common_words = word_counter.most_common(10)
+            words_df = pd.DataFrame(common_words, columns=['Word', 'Frequency'])
+            plt.figure

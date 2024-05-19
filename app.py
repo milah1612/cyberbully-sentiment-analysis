@@ -90,9 +90,15 @@ if st.sidebar.button("Analyze Sentiment"):
     else:
         st.write("Please enter some text.")  
 
-# Navigation tabs for "All", "Positive", and "Negative" sentiments
+# Define navigation tabs
 tabs = ["All", "Positive", "Negative"]
-selected_tab = st.selectbox("Select sentiment:", tabs)
+selected_tab = st.session_state.get("selected_tab", tabs[0])  # Initialize session state
+
+# Render navigation tabs
+tab_html = ""
+for tab in tabs:
+    tab_html += f'<li class="tab-item {"active" if tab == selected_tab else ""}" onclick="location.href=`#{tab.lower()}`">{tab}</li>'
+st.markdown(f'<ul class="tabs">{tab_html}</ul>', unsafe_allow_html=True)
 
 # Display corresponding content based on selected tab
 if selected_tab == "All":

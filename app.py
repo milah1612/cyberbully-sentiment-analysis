@@ -42,25 +42,27 @@ def predict_sentiment(text):
 def export_report(df):
     filename = f"sentiment_report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
     df.to_csv(filename, index=False)
-    return filename 
+    return filename  
 
-# Streamlit app
+# Function to detect English language
+def is_english(text):
+    try:
+        lang = detect(text)
+        return lang == 'en'
+    except:
+        return False  
+        
+
 st.title("Twitter Sentiment Analysis")
 user_input = st.text_area("Enter the tweet for sentiment analysis:")
 
 if st.button("Analyze Sentiment") and user_input:
-    # Detect the language of the input text
-    language = detect(user_input)
-
-    # Add this line to display the detected language
-    st.write(f"Detected Language: {language}") 
-
-    # Check if the language is English
-    if language == 'en':
+    # Check if the text is in English
+    if is_english(user_input):
         prediction = predict_sentiment(user_input)
         processed_text = preprocess_text(user_input)
         st.write(f"Processed Text: {processed_text}")
-        
+
         # Check the prediction and handle it
         if prediction == 1:
             st.write("Sentiment: Positive")
@@ -68,7 +70,7 @@ if st.button("Analyze Sentiment") and user_input:
             st.write("Sentiment: Negative")
         else:
             st.write(f"Sentiment: {prediction}")
-            
+
         # Export report option
         if st.button("Export Report"):
             # Example DataFrame

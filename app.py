@@ -2,11 +2,13 @@
 # coding: utf-8
 
 # In[ ]:
-
 import re
 import joblib
 import streamlit as st
-import contractions  
+import contractions   
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 import io 
 from langdetect import detect  
 
@@ -58,8 +60,23 @@ def is_english(text):
     return all(ord(char) < 128 for char in text)
 
 # Streamlit app
-st.title("Twitter Sentiment Analysis")
-user_input = st.text_area("Enter the tweet for sentiment analysis:")
+st.title("Twitter Sentiment Analysis")  
+st.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
+# Add search parameter/tweet box
+user_input = st.text_area("Enter the search term or tweet for sentiment analysis:", height=200) 
+
+# Add tabs for "All", "Positive", and "Negative" sentiments
+tabs = ["All", "Positive", "Negative"]
+selected_tab = st.radio("Select sentiment:", tabs)  
+
+# Display corresponding content based on selected tab
+if selected_tab == "All":
+    st.write("All tweets will be displayed here.")
+elif selected_tab == "Positive":
+    st.write("Positive sentiment analysis will be displayed here.")
+else:
+    st.write("Negative sentiment analysis will be displayed here.")
+
 
 if st.button("Analyze Sentiment"):
     if user_input:

@@ -82,7 +82,7 @@ if st.button("Export Report"):
     # Provide a download link for the exported file
     st.markdown(f'<a href="data:file/csv;base64,{base64.b64encode(df.to_csv(index=False).encode()).decode()}" download="{export_filename}">Click here to download the report</a>', unsafe_allow_html=True) 
     
-    else:
+else:
         st.warning("Sorry, this tool currently supports only English language tweets.")
 else:
     st.write("Please enter some text.")

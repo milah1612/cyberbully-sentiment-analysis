@@ -21,9 +21,6 @@ def local_css(file_path):
 # Load the CSS file
 local_css("styles.css")  # Update with the actual filename    
 
-# Twitter icon
-st.image("twitter_icon.png", width=300, output_format='png', use_column_width=False)  # Replace "twitter_icon.png" with the actual filename and path  
-
 
 def preprocess_text(text):
     # Convert text to lowercase
@@ -60,14 +57,19 @@ def is_english(text):
     return all(ord(char) < 128 for char in text)
 
 # Streamlit app
-st.title("Twitter Sentiment Analysis")  
-st.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
+# Twitter icon
+st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)  # Replace "twitter_icon.png" with the actual filename and path  
+
+# Sidebar header
+st.sidebar.title("TWITTER SENTIMENT ANALYSIS")
+st.sidebar.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
+
 # Add search parameter/tweet box
-user_input = st.text_area("Enter the search term or tweet for sentiment analysis:", height=200) 
+user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment analysis:", height=200)
 
 # Add tabs for "All", "Positive", and "Negative" sentiments
 tabs = ["All", "Positive", "Negative"]
-selected_tab = st.radio("Select sentiment:", tabs)  
+selected_tab = st.radio("Select sentiment:", tabs)
 
 # Display corresponding content based on selected tab
 if selected_tab == "All":
@@ -75,7 +77,8 @@ if selected_tab == "All":
 elif selected_tab == "Positive":
     st.write("Positive sentiment analysis will be displayed here.")
 else:
-    st.write("Negative sentiment analysis will be displayed here.")
+    st.write("Negative sentiment analysis will be displayed here.") 
+    
 
 if st.button("Analyze Sentiment"):
     if user_input:

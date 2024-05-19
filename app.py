@@ -169,9 +169,6 @@ params = st.experimental_get_query_params()
 # Set the default tab if no tab parameter is provided
 selected_tab = params.get("tab", ["All"])[0]
 
- Add Markdown text for spacing
-st.markdown("---")
-
 # Create a radio button widget to select the sentiment tab
 selected_tab = st.radio("Select sentiment:", ["All", "Positive 😊", "Negative ☹️"])
 

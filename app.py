@@ -39,11 +39,13 @@ def predict_sentiment(text):
     prediction = svm_model.predict(text_vector)
     return prediction[0]
 
-def export_report(df):
-    filename = f"sentiment_report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
-    df.to_csv(filename, index=False)
-    return filename  
-
+# Function to detect English language
+def is_english(text):
+    try:
+        lang = detect(text)
+        return lang == 'en'
+    except:
+        return False
 
 # Streamlit app
 st.title("Twitter Sentiment Analysis")
@@ -63,7 +65,6 @@ if st.button("Analyze Sentiment") and user_input:
             st.write("Sentiment: Negative")
         else:
             st.write(f"Sentiment: {prediction}")
-
 
         # Export report option
         if st.button("Export Report"):

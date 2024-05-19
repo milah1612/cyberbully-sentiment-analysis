@@ -6,7 +6,10 @@
 import re
 import joblib
 import streamlit as st
-import contractions
+import contractions 
+
+# Load CSS
+st.markdown('<link rel="stylesheet" href="styles.css">', unsafe_allow_html=True)
 
 def preprocess_text(text):
     # Convert text to lowercase

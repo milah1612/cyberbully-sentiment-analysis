@@ -8,7 +8,7 @@ import joblib
 import streamlit as st
 import contractions  
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def preprocess_text(text):
     # Convert text to lowercase
@@ -42,6 +42,25 @@ def predict_sentiment(text):
 
 # Streamlit app
 st.title("Twitter Sentiment Analysis")
+# Sidebar for export report
+st.sidebar.header("Export Report")
+start_date = st.sidebar.date_input("Start date", value=datetime.now() - timedelta(days=30), max_value=datetime.now() - timedelta(days=1))
+end_date = st.sidebar.date_input("End date", value=datetime.now(), max_value=datetime.now())
+
+if start_date and end_date:
+    if (end_date - start_date).days > 30:
+        st.sidebar.error("The date range cannot exceed 30 days.")
+    else:
+        if st.sidebar.button("Export Report"):
+            report_df = generate_report_data(start_date, end_date)
+            st.sidebar.download_button(
+                label="Download CSV",
+                data=report_df.to_csv(index=False),
+                file_name=f"sentiment_report_{start_date}_{end_date}.csv",
+                mime="text/csv"
+            )
+
+# Get user input
 user_input = st.text_area("Enter the tweet for sentiment analysis:")
 
 if st.button("Analyze Sentiment"):
@@ -53,25 +72,22 @@ if st.button("Analyze Sentiment"):
         sentiment = "Positive" if prediction == 1 else "Negative"
         
         # Display results
-        st.write(f"Processed Text: {processed_text}")
-        st.write(f"Sentiment: {sentiment}")
-        
-        # Create a dataframe for export
-        report_data = {
-            'User Input': [user_input],
-            'Processed Text': [processed_text],
-            'Sentiment': [sentiment],
-            'Date': [datetime.now().strftime("%Y-%m-%d")],
-            'Time': [datetime.now().strftime("%H:%M:%S")]
-        }
-        report_df = pd.DataFrame(report_data)
-        
-        # Display export button
-        st.download_button(
-            label="Export Report",
-            data=report_df.to_csv(index=False),
-            file_name=f"sentiment_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-            mime="text/csv"
-        )
+        st.write(f"**Processed Text:** {processed_text}")
+        st.write(f"**Sentiment:** {sentiment}")
     else:
         st.write("Please enter some text.")
+
+# Custom CSS for background color and other styles
+st.markdown(
+    """
+    <style>
+    .main {
+        background-color: #f0f0f5;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.header("Sentiment Analysis Dashboard")
+st.subheader("Analyze the sentiment of tweets in real-time")

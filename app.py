@@ -163,10 +163,22 @@ button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
 """
 st.write(adjust_tab_font, unsafe_allow_html=True)
 
-# Create 3 tabs for All, Positive, and Negative tweets
-tabs = st.tabs(["All", "Positive 😊", "Negative ☹️"])
+# Get the current page URL and parameters
+params = st.experimental_get_query_params()
 
-with tabs[0]:
+# Set the default tab if no tab parameter is provided
+selected_tab = params.get("tab", ["All"])[0]
+
+# Create 3 tabs for All, Positive, and Negative tweets
+tabs = ["All", "Positive 😊", "Negative ☹️"]
+selected_tab = st.radio("Select sentiment:", tabs, index=tabs.index(selected_tab))
+
+# Update the URL with the selected tab
+params["tab"] = [selected_tab]
+url = st.experimental_set_query_params(**params)
+
+# Display content based on the selected tab
+if selected_tab == "All":
     # Make dashboard for all tweets
     if "df" in st.session_state:
         tweet_df = st.session_state.df
@@ -174,7 +186,7 @@ with tabs[0]:
     else:
         st.write("No tweets to display.")
 
-with tabs[1]:
+elif selected_tab == "Positive 😊":
     # Make dashboard for tweets with positive sentiment
     if "df" in st.session_state:
         tweet_df = st.session_state.df.query("Sentiment == 'Positive'")
@@ -182,7 +194,7 @@ with tabs[1]:
     else:
         st.write("No positive tweets to display.")
 
-with tabs[2]:
+else:
     # Make dashboard for tweets with negative sentiment
     if "df" in st.session_state:
         tweet_df = st.session_state.df.query("Sentiment == 'Negative'")

@@ -93,10 +93,6 @@ if st.sidebar.button("Analyze Sentiment"):
     else:
         st.sidebar.write("Please enter some text.") 
 
-# Main content area
-st.title("Twitter Sentiment Analysis Dashboard")
-st.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.") 
-
 
 # Define navigation tabs
 tabs = ["All", "Positive", "Negative"]

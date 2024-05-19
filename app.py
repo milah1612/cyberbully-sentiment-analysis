@@ -171,7 +171,8 @@ selected_tab = params.get("tab", ["All"])[0]
 
 # Create 3 tabs for All, Positive, and Negative tweets
 tabs = ["All", "Positive 😊", "Negative ☹️"]
-selected_tab = st.radio("Select sentiment:", tabs, index=tabs.index(selected_tab))
+selected_tab = st.session_state.selected_tab if "selected_tab" in st.session_state else "All"
+selected_tab_index = tabs.index(selected_tab)
 
 # Update the URL with the selected tab
 params["tab"] = [selected_tab]
@@ -201,3 +202,7 @@ else:
         make_dashboard(tweet_df, bar_color="#FF7F0E", wc_color="Oranges")
     else:
         st.write("No negative tweets to display.")
+
+# Display tabs and store selected tab in session state
+with st.sidebar:
+    st.session_state.selected_tab = st.tabs(selected_tab_index, tabs)

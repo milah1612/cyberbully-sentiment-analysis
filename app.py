@@ -103,7 +103,7 @@ if st.sidebar.button("Analyze Sentiment"):
 
 
 # Add tabs for "All", "Positive", and "Negative" sentiments
-tabs = st.sidebar.radio("Select sentiment:", ["All", "Positive", "Negative"])
+tabs = st.sidebar.selectbox("Select sentiment:", ["All", "Positive", "Negative"])
 
 if tabs == "All":
     st.write("### All Tweets")

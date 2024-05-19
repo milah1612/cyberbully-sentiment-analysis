@@ -67,9 +67,9 @@ if st.button("Analyze Sentiment") and user_input:
         elif prediction == 0:
             st.write("Sentiment: Negative")
         else:
-            st.write(f"Sentiment: {prediction}")
-            
-       # Export report option
+            st.write(f"Sentiment: {prediction}") 
+
+# Export report option
 if st.button("Export Report"):
     # Example DataFrame
     data = {'Text': [processed_text],
@@ -83,7 +83,4 @@ if st.button("Export Report"):
     st.markdown(f'<a href="data:file/csv;base64,{base64.b64encode(df.to_csv(index=False).encode()).decode()}" download="{export_filename}">Click here to download the report</a>', unsafe_allow_html=True) 
     
 else:
-        st.warning("Sorry, this tool currently supports only English language tweets.")
-else:
-    st.write("Please enter some text.")
-
+    st.warning("Sorry, this tool currently supports only English language tweets.")

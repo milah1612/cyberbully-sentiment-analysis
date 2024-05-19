@@ -18,7 +18,7 @@ def local_css(file_path):
 local_css("styles.css")  # Update with the actual filename    
 
 # Twitter icon
-st.image("twitter_icon.png", width=100)  # Replace "twitter_icon.png" with the actual filename and path  
+st.image("twitter_icon.png", caption="Twitter Icon", width=300, output_format='png', use_column_width=False)  # Replace "twitter_icon.png" with the actual filename and path  
 
 
 def preprocess_text(text):

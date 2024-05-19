@@ -6,7 +6,11 @@
 import re
 import joblib
 import streamlit as st
-import contractions
+import contractions 
+import pandas as pd
+from datetime import datetime, timedelta, timezone
+import pytz 
+
 
 def preprocess_text(text):
     # Convert text to lowercase
@@ -36,7 +40,18 @@ def preprocess_and_vectorize(text):
 def predict_sentiment(text):
     text_vector = preprocess_and_vectorize(text)
     prediction = svm_model.predict(text_vector)
-    return prediction[0]
+    return prediction[0]  
+
+
+# Function to export report
+def export_report(df, start_date, end_date):
+    local_timezone = pytz.timezone('Asia/Kuala_Lumpur')
+    current_time = datetime.now(local_timezone)
+    filename = f"sentiment_report_{current_time.strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+    df.to_csv(filename, index=False)
+    return filename
+
+
 
 # Streamlit app
 st.title("Twitter Sentiment Analysis")
@@ -56,4 +71,22 @@ if st.button("Analyze Sentiment"):
         else:
             st.write(f"Sentiment: {prediction}")
     else:
-        st.write("Please enter some text.")
+        st.write("Please enter some text.") 
+
+
+# Sidebar for report export
+st.sidebar.title("Report Export")
+start_date = st.sidebar.date_input("Start Date")
+end_date = st.sidebar.date_input("End Date")
+max_date = datetime.now() - timedelta(days=30)
+start_date = max(start_date, max_date)
+end_date = min(end_date, datetime.now())
+if st.sidebar.button("Export Report"):
+    # Example DataFrame
+    data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
+            'Sentiment': ['Positive', 'Negative', 'Neutral'],
+            'Date': [datetime.now(), datetime.now(), datetime.now()]}
+    df = pd.DataFrame(data)
+    df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
+    export_filename = export_report(df, start_date, end_date)
+    st.sidebar.success(f"Report exported successfully as {export_filename}")

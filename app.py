@@ -6,10 +6,17 @@
 import re
 import joblib
 import streamlit as st
-import contractions 
+import contractions  
+import io
 
-# Load CSS
-st.markdown('<link rel="stylesheet" href="styles.css">', unsafe_allow_html=True)
+# Function to load CSS file
+def local_css(file_path):
+    with io.open(file_path, "r") as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+# Load the CSS file
+local_css("styles.css")  # Update with the actual filename  
+
 
 def preprocess_text(text):
     # Convert text to lowercase

@@ -96,4 +96,110 @@ img.twitter_icon {
 .active {
     background-color: #007bff;
     color: #fff;
+} 
+
+
+/* CSS for Streamlit app */
+
+/* Title */
+.title {
+    font-size: 36px;
+    color: #333333;
+    margin-bottom: 30px;
+}
+
+/* Text area */
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    resize: none;
+}
+
+/* Button */
+button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Result display */
+.result {
+    margin-top: 20px;
+}
+
+/* Positive sentiment */
+.positive {
+    color: #008000; /* Green */
+}
+
+/* Negative sentiment */
+.negative {
+    color: #ff0000; /* Red */
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f2f2f2;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+/* Twitter icon */
+img.twitter_icon {
+    position: fixed;
+    top: 100px;
+    left: 100px;
+    z-index: 9999; /* Ensure the icon is on top of other elements */
+}
+
+/* Tabs */
+.stTabs {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    border-bottom: 2px solid #ccc;
+}
+
+.stTabs .tab-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    margin-right: 5px;
+    background-color: #f9f9f9;
+    border-radius: 5px 5px 0 0;
+}
+
+.stTabs .tab-item.active {
+    background-color: #fff;
+    border-bottom: 2px solid #ccc;
+}
+
+/* Ensure the content within tabs is centered */
+.stTabs > div {
+    display: flex;
+    justify-content: center;
 }

@@ -66,10 +66,6 @@ st.sidebar.write("This application performs sentiment analysis on the latest twe
 
 # Add search parameter/tweet box
 user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment analysis:", height=200)
-
-# Add tabs for "All", "Positive", and "Negative" sentiments
-tabs = ["All", "Positive", "Negative"]
-selected_tab = st.radio("Select sentiment:", tabs)
     
 if st.sidebar.button("Analyze Sentiment"):
     if user_input:

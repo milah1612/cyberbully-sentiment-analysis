@@ -20,12 +20,6 @@ local_css("styles.css")  # Update with the actual filename
 # Twitter icon
 st.image("twitter_icon.png", width=100)  # Replace "twitter_icon.png" with the actual filename and path  
 
-# Header
-st.title("Twitter Sentiment Analysis")
-
-# Additional text
-st.write("Analyzing sentiments of tweets.")
-
 
 def preprocess_text(text):
     # Convert text to lowercase

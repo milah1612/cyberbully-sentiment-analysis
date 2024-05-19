@@ -13,8 +13,6 @@ from datetime import datetime, timedelta
 import base64  # Add this line to import base64   
 from langdetect import detect
 
-
-
 # Function to preprocess text
 def preprocess_text(text):
     text = text.lower()  # Convert text to lowercase
@@ -46,7 +44,6 @@ def export_report(df):
     df.to_csv(filename, index=False)
     return filename 
 
-
 # Streamlit app
 st.title("Twitter Sentiment Analysis")
 user_input = st.text_area("Enter the tweet for sentiment analysis:")
@@ -68,10 +65,8 @@ if st.button("Analyze Sentiment") and user_input:
             st.write("Sentiment: Negative")
         else:
             st.write(f"Sentiment: {prediction}")
-    else:
-        st.write("Please enter some text.")
-
- # Export report option
+            
+        # Export report option
         if st.button("Export Report"):
             # Example DataFrame
             data = {'Text': [processed_text],

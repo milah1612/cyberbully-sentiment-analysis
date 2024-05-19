@@ -20,7 +20,7 @@ nltk.download('stopwords')
 nltk.download('wordnet') 
 
 
-ef preprocess_text(text):
+def preprocess_text(text):
     text = text.lower()
     text = re.sub(r"https?\S+|www\.\S+|@[^\s]+|[^\w\s]|[\u0080-\uffff]", "", text)
     text = contractions.fix(text)

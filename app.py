@@ -169,14 +169,8 @@ params = st.experimental_get_query_params()
 # Set the default tab if no tab parameter is provided
 selected_tab = params.get("tab", ["All"])[0]
 
-# Create 3 tabs for All, Positive, and Negative tweets
-tabs = ["All", "Positive 😊", "Negative ☹️"]
-selected_tab = st.session_state.selected_tab if "selected_tab" in st.session_state else "All"
-selected_tab_index = tabs.index(selected_tab)
-
-# Update the URL with the selected tab
-params["tab"] = [selected_tab]
-url = st.experimental_set_query_params(**params)
+# Create a sidebar widget to select the sentiment tab
+selected_tab = st.sidebar.radio("Select sentiment:", ["All", "Positive 😊", "Negative ☹️"])
 
 # Display content based on the selected tab
 if selected_tab == "All":
@@ -202,7 +196,3 @@ else:
         make_dashboard(tweet_df, bar_color="#FF7F0E", wc_color="Oranges")
     else:
         st.write("No negative tweets to display.")
-
-# Display tabs and store selected tab in session state
-with st.sidebar:
-    st.session_state.selected_tab = st.tabs(selected_tab_index, tabs)

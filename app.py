@@ -79,7 +79,7 @@ st.sidebar.title("Report Export")
 start_date = st.sidebar.date_input("Start Date")
 end_date = st.sidebar.date_input("End Date")
 max_date = datetime.now() - timedelta(days=30)
-start_date = max(start_date, max_date)
+start_date = max(start_date, max_date.replace(tzinfo=None))  # Convert max_date to same type as start_date
 end_date = min(end_date, datetime.now())
 if st.sidebar.button("Export Report"):
     # Example DataFrame

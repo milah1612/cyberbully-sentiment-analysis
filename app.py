@@ -53,7 +53,7 @@ if st.button("Analyze Sentiment") and user_input:
     language = detect(user_input)
 
  # Add this line to display the detected language
- st.write(f"Detected Language: {language}") 
+  st.write(f"Detected Language: {language}") 
 
     
     # Check if the language is English

@@ -79,6 +79,3 @@ if st.button("Analyze Sentiment"):
             st.write("Please enter non-empty English text for sentiment analysis.")
     else:
         st.write("Please enter some text.")
-            st.write("Please enter non-empty English text for sentiment analysis.")
-    else:
-        st.write("Please enter some text.")

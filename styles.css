@@ -68,7 +68,7 @@ button:hover {
 /* Twitter icon */
 img.twitter_icon {
     position: fixed;
-    top: 30px;
-    left: 30px;
+    top: 100px;
+    left: 100px;
     z-index: 9999; /* Ensure the icon is on top of other elements */
 }

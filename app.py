@@ -10,7 +10,8 @@ import streamlit as st
 import contractions
 import pandas as pd
 from datetime import datetime, timedelta 
-import base64  # Add this line to import base64 
+import base64  # Add this line to import base64  
+import os
 
 
 # Function to preprocess text
@@ -39,9 +40,8 @@ def predict_sentiment(text):
     prediction = svm_model.predict(text_vector)
     return prediction[0]
 
-# Function to export report
-def export_report(df, start_date, end_date):
-    filename = f"sentiment_report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+def export_report(df):
+    filename = f"sentiment_report_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
     df.to_csv(filename, index=False)
     return filename 
 
@@ -83,18 +83,18 @@ if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
             'Sentiment': ['Positive', 'Negative', 'Neutral'],
-            'Date': [datetime.now(), datetime.now(), datetime.now()]}
+            'Date': [datetime.datetime.now(), datetime.datetime.now(), datetime.datetime.now()]}
     df = pd.DataFrame(data)
-    df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
-    if not df.empty:
-        df['Sentiment'] = df['Sentiment'].map({1: 'Positive', 0: 'Negative'})
-        export_filename = export_report(df, start_date, end_date)
-        st.sidebar.success(f"Report exported successfully as {export_filename}")
-        
-        # Provide a download link for the exported file
-        csv = df.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
-        href = f"data:text/csv;base64,{b64}"
-        st.markdown(f'<a href="{href}" download="{export_filename}">Click here to download the report</a>', unsafe_allow_html=True)
-    else:
-        st.sidebar.warning("No data available for the selected date range.")
+
+    # Get the file name for the exported report
+    export_filename = export_report(df)
+
+    # Provide a download link for the exported file
+    with open(export_filename, "rb") as f:
+        file_content = f.read()
+    b64 = base64.b64encode(file_content).decode('utf-8')
+    href = f'<a href="data:file/csv;base64,{b64}" download="{export_filename}">Click here to download the report</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
+    # Delete the temporary file
+    os.remove(export_filename)

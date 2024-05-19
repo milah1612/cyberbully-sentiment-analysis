@@ -69,7 +69,7 @@ if st.button("Analyze Sentiment"):
  # Export report option
     if st.button("Export Report"):
         # Example DataFrame
-        data = {'Text': [processed_text],
+        data = {'Text': [preprocessed_text],
                 'Sentiment': ['Positive' if prediction == 1 else 'Negative'],
                 'Date': [datetime.now()]}
         df = pd.DataFrame(data)

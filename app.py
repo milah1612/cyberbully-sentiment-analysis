@@ -81,12 +81,12 @@ if st.button("Analyze Sentiment") and user_input:
             export_filename = export_report(df)
             st.success(f"Report exported successfully as {export_filename}")
 
-            # Provide a download button for the exported file
-            with open(export_filename, "rb") as f:
-                file_content = f.read()
-            b64 = base64.b64encode(file_content).decode('utf-8')
-            href = f'<a href="data:file/csv;base64,{b64}" download="{export_filename}">Click here to download the report</a>'
-            st.markdown(href, unsafe_allow_html=True)
+                # Provide a download link for the exported file
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:text/csv;base64,{b64}" download="{export_filename}">Click here to download the report</a>'
+    st.markdown(href, unsafe_allow_html=True) 
+    
     else:
         st.warning("Sorry, this tool currently supports only English language tweets.")
 else:

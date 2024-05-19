@@ -15,7 +15,16 @@ def local_css(file_path):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # Load the CSS file
-local_css("styles.css")  # Update with the actual filename  
+local_css("styles.css")  # Update with the actual filename   
+
+# Header
+st.title("Twitter Sentiment Analysis")
+
+# Additional text
+st.write("Analyzing sentiments of tweets.")
+
+# Twitter icon
+st.image("twitter_icon.png", width=100)  # Replace "twitter_icon.png" with the actual filename and path 
 
 
 def preprocess_text(text):

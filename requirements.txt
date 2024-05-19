@@ -53,4 +53,4 @@ urllib3==2.2.1
 validators==0.28.1
 watchdog==4.0.0
 contractions==0.0.52
-
+transformers==4.12.0

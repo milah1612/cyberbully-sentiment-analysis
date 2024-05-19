@@ -12,8 +12,6 @@ import seaborn as sns
 import io 
 from langdetect import detect   
 from collections import Counter
-from wordcloud import WordCloud 
-
 
 
 # Function to load CSS file
@@ -105,32 +103,41 @@ if st.sidebar.button("Analyze Sentiment"):
 
 
 # Add tabs for "All", "Positive", and "Negative" sentiments
-tabs = st.tabs(["All", "Positive", "Negative"])
+tabs = st.sidebar.radio("Select sentiment:", ["All", "Positive", "Negative"])
 
-with tabs[0]:
+if tabs == "All":
     st.write("### All Tweets")
     if st.session_state.tweets:
         df_all = pd.DataFrame(st.session_state.tweets)
         st.write(df_all)
     else:
         st.write("No tweets to display.")
-        
-with tabs[1]:
+
+elif tabs == "Positive":
     st.write("### Positive Sentiment Analysis")
     if st.session_state.tweets:
         df_positive = pd.DataFrame([tweet for tweet in st.session_state.tweets if tweet["Sentiment"] == "Positive"])
         st.write(df_positive)
 
         if not df_positive.empty:
-            # Pie chart of total positive words
-            st.write("#### Pie Chart of Positive Words")
-            all_words = ' '.join(df_positive['Processed Text'])
-            word_counter = Counter(all_words.split())
-            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_counter)
-            st.image(wordcloud.to_array())
-
             # Bar plot of top occurring words
             st.write("#### Bar Plot of Top Occurring Words")
+            all_words = ' '.join(df_positive['Processed Text'])
+            word_counter = Counter(all_words.split())
+            common_words = word_counter.most_common(10)
+            words_df = pd.DataFrame(common_words, columns=['Word', 'Frequency'])
+            plt.figure
+else:
+    st.write("### Negative Sentiment Analysis")
+    if st.session_state.tweets:
+        df_negative = pd.DataFrame([tweet for tweet in st.session_state.tweets if tweet["Sentiment"] == "Negative"])
+        st.write(df_negative)
+
+        if not df_negative.empty:
+            # Bar plot of top occurring words
+            st.write("#### Bar Plot of Top Occurring Words")
+            all_words = ' '.join(df_negative['Processed Text'])
+            word_counter = Counter(all_words.split())
             common_words = word_counter.most_common(10)
             words_df = pd.DataFrame(common_words, columns=['Word', 'Frequency'])
             plt.figure

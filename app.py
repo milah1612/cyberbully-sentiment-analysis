@@ -66,20 +66,10 @@ if st.button("Analyze Sentiment"):
     else:
         st.write("Please enter some text.")
 
-# Sidebar for report export
-st.sidebar.title("Report Export")
-start_date_input = st.sidebar.date_input("Start Date")
-end_date_input = st.sidebar.date_input("End Date")
-max_date = datetime.now() - timedelta(days=30)
-
-# Ensure start_date_input is a datetime object
-start_date = datetime.combine(start_date_input, datetime.min.time()) if start_date_input else max_date
-end_date = datetime.combine(end_date_input, datetime.max.time()) if end_date_input else datetime.now()
-
 if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
-            'Sentiment': ['Positive', 'Negative'],
+            'Sentiment': ['Positive', 'Negative', 'Neutral'],
             'Date': [datetime.now(), datetime.now(), datetime.now()]}
     df = pd.DataFrame(data)
 
@@ -95,3 +85,4 @@ if st.sidebar.button("Export Report"):
 
     # Delete the temporary file
     os.remove(export_filename)
+

@@ -88,5 +88,11 @@ if st.sidebar.button("Export Report"):
         df['Sentiment'] = df['Sentiment'].map({1: 'Positive', 0: 'Negative'})
         export_filename = export_report(df, start_date, end_date)
         st.sidebar.success(f"Report exported successfully as {export_filename}")
+        
+        # Provide a download link for the exported file
+        csv = df.to_csv(index=False)
+        b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+        href = f'<a href="data:file/csv;base64,{b64}" download="{export_filename}">Click here to download the report</a>'
+        st.markdown(href, unsafe_allow_html=True)
     else:
         st.sidebar.warning("No data available for the selected date range.")

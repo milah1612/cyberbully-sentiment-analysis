@@ -169,8 +169,11 @@ params = st.experimental_get_query_params()
 # Set the default tab if no tab parameter is provided
 selected_tab = params.get("tab", ["All"])[0]
 
-# Create a sidebar widget to select the sentiment tab
-selected_tab = st.sidebar.radio("Select sentiment:", ["All", "Positive 😊", "Negative ☹️"])
+ Add Markdown text for spacing
+st.markdown("---")
+
+# Create a radio button widget to select the sentiment tab
+selected_tab = st.radio("Select sentiment:", ["All", "Positive 😊", "Negative ☹️"])
 
 # Display content based on the selected tab
 if selected_tab == "All":

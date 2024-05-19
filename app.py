@@ -53,15 +53,17 @@ def predict_sentiment(text):
     prediction = svm_model.predict(text_vector)
     return prediction[0]
 
+# Function to check if text contains only English characters
+def is_english(text):
+    return all(ord(char) < 128 for char in text)
+
 # Streamlit app
 st.title("Twitter Sentiment Analysis")
 user_input = st.text_area("Enter the tweet for sentiment analysis:")
 
 if st.button("Analyze Sentiment"):
     if user_input:
-        # Perform language detection
-        detected_language = detect(user_input)
-        if detected_language == 'en' and len(user_input.split()) > 1:  # Proceed if the detected language is English and the tweet is not empty
+        if is_english(user_input) and len(user_input.split()) > 1:  # Check if text is English and not empty
             prediction = predict_sentiment(user_input)
             processed_text = preprocess_text(user_input)
             st.write(f"Processed Text: {processed_text}")
@@ -74,6 +76,9 @@ if st.button("Analyze Sentiment"):
             else:
                 st.write(f"Sentiment: {prediction}")
         else:
+            st.write("Please enter non-empty English text for sentiment analysis.")
+    else:
+        st.write("Please enter some text.")
             st.write("Please enter non-empty English text for sentiment analysis.")
     else:
         st.write("Please enter some text.")

@@ -9,7 +9,9 @@ import joblib
 import streamlit as st
 import contractions
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta 
+import base64  # Add this line to import base64 
+
 
 # Function to preprocess text
 def preprocess_text(text):

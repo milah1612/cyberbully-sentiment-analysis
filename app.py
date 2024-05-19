@@ -103,41 +103,34 @@ if st.sidebar.button("Analyze Sentiment"):
 
 
 # Add tabs for "All", "Positive", and "Negative" sentiments
-tabs = st.sidebar.selectbox("Select sentiment:", ["All", "Positive", "Negative"])
+tabs = st.button("All")
+tabs_positive = st.button("Positive")
+tabs_negative = st.button("Negative")
 
-if tabs == "All":
-    st.write("### All Tweets")
-    if st.session_state.tweets:
-        df_all = pd.DataFrame(st.session_state.tweets)
-        st.write(df_all)
-    else:
-        st.write("No tweets to display.")
+# Center the tabs
+st.markdown(
+    "<style>.btn-center { display: flex; justify-content: center; }</style>",
+    unsafe_allow_html=True,
+)
+st.markdown('<div class="btn-center">', unsafe_allow_html=True)
 
-elif tabs == "Positive":
-    st.write("### Positive Sentiment Analysis")
-    if st.session_state.tweets:
-        df_positive = pd.DataFrame([tweet for tweet in st.session_state.tweets if tweet["Sentiment"] == "Positive"])
-        st.write(df_positive)
-
-        if not df_positive.empty:
-            # Bar plot of top occurring words
-            st.write("#### Bar Plot of Top Occurring Words")
-            all_words = ' '.join(df_positive['Processed Text'])
-            word_counter = Counter(all_words.split())
-            common_words = word_counter.most_common(10)
-            words_df = pd.DataFrame(common_words, columns=['Word', 'Frequency'])
-            plt.figure
+# Determine which tab is active
+if tabs:
+    selected_tab = "All"
+elif tabs_positive:
+    selected_tab = "Positive"
+elif tabs_negative:
+    selected_tab = "Negative"
 else:
-    st.write("### Negative Sentiment Analysis")
-    if st.session_state.tweets:
-        df_negative = pd.DataFrame([tweet for tweet in st.session_state.tweets if tweet["Sentiment"] == "Negative"])
-        st.write(df_negative)
+    selected_tab = "All"  # Default to "All" if no tab is selected
 
-        if not df_negative.empty:
-            # Bar plot of top occurring words
-            st.write("#### Bar Plot of Top Occurring Words")
-            all_words = ' '.join(df_negative['Processed Text'])
-            word_counter = Counter(all_words.split())
-            common_words = word_counter.most_common(10)
-            words_df = pd.DataFrame(common_words, columns=['Word', 'Frequency'])
-            plt.figure
+# Display content based on selected tab
+if selected_tab == "All":
+    st.write("Content for All tab")
+elif selected_tab == "Positive":
+    st.write("Content for Positive tab")
+elif selected_tab == "Negative":
+    st.write("Content for Negative tab")
+
+# End the centered div
+st.markdown("</div>", unsafe_allow_html=True)

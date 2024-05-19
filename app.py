@@ -58,20 +58,22 @@ st.title("Twitter Sentiment Analysis")
 user_input = st.text_area("Enter the tweet for sentiment analysis:")
 
 if st.button("Analyze Sentiment"):
-    if user_input: 
+    if user_input:
         # Perform language detection
         language = detect(user_input)
         if language == 'en':  # Only proceed if the text is detected as English
-        prediction = predict_sentiment(user_input)
-        processed_text = preprocess_text(user_input)
-        st.write(f"Processed Text: {processed_text}")
-        
-        # Check the prediction and handle it
-        if prediction == 1:
-            st.write("Sentiment: Positive")
-        elif prediction == 0:
-            st.write("Sentiment: Negative")
+            prediction = predict_sentiment(user_input)
+            processed_text = preprocess_text(user_input)
+            st.write(f"Processed Text: {processed_text}")
+
+            # Check the prediction and handle it
+            if prediction == 1:
+                st.write("Sentiment: Positive")
+            elif prediction == 0:
+                st.write("Sentiment: Negative")
+            else:
+                st.write(f"Sentiment: {prediction}")
         else:
-            st.write(f"Sentiment: {prediction}")
+            st.write("Please enter text in English.")
     else:
         st.write("Please enter some text.")

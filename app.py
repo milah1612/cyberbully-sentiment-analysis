@@ -102,35 +102,90 @@ if st.sidebar.button("Analyze Sentiment"):
         st.sidebar.write("Please enter some text.") 
 
 
-# Add tabs for "All", "Positive", and "Negative" sentiments
-tabs = st.button("All")
-tabs_positive = st.button("Positive")
-tabs_negative = st.button("Negative")
+# Function to make the dashboard
+def make_dashboard(tweet_df, bar_color, wc_color):
+    # Make 3 columns for the first row of the dashboard
+    col1, col2, col3 = st.columns([28, 34, 38])
+    with col1:
+        # Plot the sentiment distribution
+        sentiment_plot = hf.plot_sentiment(tweet_df)
+        sentiment_plot.update_layout(height=350, title_x=0.5)
+        st.plotly_chart(sentiment_plot, theme=None, use_container_width=True)
 
-# Center the tabs
-st.markdown(
-    "<style>.btn-center { display: flex; justify-content: center; }</style>",
-    unsafe_allow_html=True,
-)
-st.markdown('<div class="btn-center">', unsafe_allow_html=True)
+    with col2:
+        # Plot the top 10 occurring words 
+        top_unigram = hf.get_top_n_gram(tweet_df, ngram_range=(1, 1), n=10)
+        unigram_plot = hf.plot_n_gram(
+            top_unigram, title="Top 10 Occurring Words", color=bar_color
+        )
+        unigram_plot.update_layout(height=350)
+        st.plotly_chart(unigram_plot, theme=None, use_container_width=True)
 
-# Determine which tab is active
-if tabs:
-    selected_tab = "All"
-elif tabs_positive:
-    selected_tab = "Positive"
-elif tabs_negative:
-    selected_tab = "Negative"
-else:
-    selected_tab = "All"  # Default to "All" if no tab is selected
+    with col3:
+        # Plot the top 10 occurring bigrams
+        top_bigram = hf.get_top_n_gram(tweet_df, ngram_range=(2, 2), n=10)
+        bigram_plot = hf.plot_n_gram(
+            top_bigram, title="Top 10 Occurring Bigrams", color=bar_color
+        )
+        bigram_plot.update_layout(height=350)
+        st.plotly_chart(bigram_plot, theme=None, use_container_width=True)
 
-# Display content based on selected tab
-if selected_tab == "All":
-    st.write("Content for All tab")
-elif selected_tab == "Positive":
-    st.write("Content for Positive tab")
-elif selected_tab == "Negative":
-    st.write("Content for Negative tab")
+    # Make 2 columns for the second row of the dashboard
+    col1, col2 = st.columns([60, 40])
+    with col1:
+        # Function to color the sentiment column
+        def sentiment_color(sentiment):
+            if sentiment == "Positive":
+                return "background-color: #1F77B4; color: white"
+            else:
+                return "background-color: #FF7F0E"
 
-# End the centered div
-st.markdown("</div>", unsafe_allow_html=True)
+        # Show the dataframe containing the tweets and their sentiment
+        st.dataframe(
+            tweet_df[["Sentiment", "Tweet"]].style.applymap(
+                sentiment_color, subset=["Sentiment"]
+            ),
+            height=350
+        )
+
+    with col2:
+        # Plot the wordcloud
+        wordcloud = hf.plot_wordcloud(tweet_df, colormap=wc_color)
+        st.pyplot(wordcloud)
+
+# Increase the font size of text inside the tabs
+adjust_tab_font = """
+<style>
+button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
+    font-size: 20px;
+}
+</style>
+"""
+st.write(adjust_tab_font, unsafe_allow_html=True)
+
+# Create 3 tabs for All, Positive, and Negative tweets
+tabs = st.tabs(["All", "Positive 😊", "Negative ☹️"])
+
+with tabs[0]:
+    # Make dashboard for all tweets
+    if "df" in st.session_state:
+        tweet_df = st.session_state.df
+        make_dashboard(tweet_df, bar_color="#54A24B", wc_color="Greens")
+    else:
+        st.write("No tweets to display.")
+
+with tabs[1]:
+    # Make dashboard for tweets with positive sentiment
+    if "df" in st.session_state:
+        tweet_df = st.session_state.df.query("Sentiment == 'Positive'")
+        make_dashboard(tweet_df, bar_color="#1F77B4", wc_color="Blues")
+    else:
+        st.write("No positive tweets to display.")
+
+with tabs[2]:
+    # Make dashboard for tweets with negative sentiment
+    if "df" in st.session_state:
+        tweet_df = st.session_state.df.query("Sentiment == 'Negative'")
+        make_dashboard(tweet_df, bar_color="#FF7F0E", wc_color="Oranges")
+    else:
+        st.write("No negative tweets to display.")

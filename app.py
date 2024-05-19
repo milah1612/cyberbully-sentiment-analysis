@@ -9,33 +9,37 @@ import streamlit as st
 import contractions  
 import pandas as pd
 from datetime import datetime, timedelta 
-import pytz
+import pytz  
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS 
 
-def preprocess_text(text):
-    # Convert text to lowercase
+# Download NLTK resources
+import nltk
+nltk.download('stopwords')
+nltk.download('wordnet') 
+
+
+ef preprocess_text(text):
     text = text.lower()
-    # Remove links, mentions, non-ASCII characters, and punctuations
     text = re.sub(r"https?\S+|www\.\S+|@[^\s]+|[^\w\s]|[\u0080-\uffff]", "", text)
-    # Expand contractions
     text = contractions.fix(text)
-    # Remove short words (optional, depends on your use case)
     words = text.split()
-    words = [word for word in words if len(word) > 2]
-    # Join words back into text
+    words = [word for word in words if word not in stopwords.words('english') and word not in ENGLISH_STOP_WORDS]
+    lemmatizer = WordNetLemmatizer()
+    words = [lemmatizer.lemmatize(word) for word in words]
     processed_text = ' '.join(words)
     return processed_text
 
-# Load the SVM model and TF-IDF vectorizer
+# Load SVM model and TF-IDF vectorizer
 svm_model = joblib.load('svm_model.pkl')
 tfidf_vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-# Define a function to preprocess and vectorize text
 def preprocess_and_vectorize(text):
     processed_text = preprocess_text(text)
     text_vector = tfidf_vectorizer.transform([processed_text])
     return text_vector
 
-# Define a function to make predictions
 def predict_sentiment(text):
     text_vector = preprocess_and_vectorize(text)
     prediction = svm_model.predict(text_vector)
@@ -44,7 +48,6 @@ def predict_sentiment(text):
 # Streamlit app
 st.set_page_config(page_title="Twitter Sentiment Analysis", page_icon=":bird:", layout="wide")
 
-# Custom CSS for background color and header
 st.markdown(
     """
     <style>
@@ -62,30 +65,22 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Header
 st.title("Twitter Sentiment Analysis")
 st.header("Analyze the sentiment of tweets in real-time")
 
-# Get user input
 user_input = st.text_area("Enter the tweet for sentiment analysis:")
 
 if st.button("Analyze Sentiment"):
     if user_input:
         prediction = predict_sentiment(user_input)
         processed_text = preprocess_text(user_input)
-        
-        # Determine sentiment
         sentiment = "Positive" if prediction == 1 else "Negative"
-        
-        # Display results
         st.write(f"**Processed Text:** {processed_text}")
         st.write(f"**Sentiment:** {sentiment}")
         
-        # Store the result with timestamp in MYT
         myt = pytz.timezone('Asia/Kuala_Lumpur')
         timestamp = datetime.now(myt).strftime("%Y-%m-%d %H:%M:%S")
 
-        # Simulate storing results in a list (to be replaced with a database in a real app)
         if 'results' not in st.session_state:
             st.session_state.results = []
 
@@ -98,7 +93,6 @@ if st.button("Analyze Sentiment"):
     else:
         st.write("Please enter some text.")
 
-# Sidebar for exporting report
 st.sidebar.title("Export Report")
 start_date = st.sidebar.date_input("Start date", datetime.now() - timedelta(days=30))
 end_date = st.sidebar.date_input("End date", datetime.now())
@@ -108,7 +102,6 @@ if st.sidebar.button("Export Report"):
         df = pd.DataFrame(st.session_state.results)
         df['Timestamp'] = pd.to_datetime(df['Timestamp'])
 
-        # Filter by date range
         mask = (df['Timestamp'] >= pd.to_datetime(start_date)) & (df['Timestamp'] <= pd.to_datetime(end_date))
         export_df = df.loc[mask]
 
@@ -124,7 +117,6 @@ if st.sidebar.button("Export Report"):
     else:
         st.sidebar.write("No sentiment analysis results available to export.")
 
-# Footer
 st.markdown(
     """
     <footer style='text-align: center; margin-top: 2rem;'>

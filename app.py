@@ -6,7 +6,9 @@
 import re
 import joblib
 import streamlit as st
-import contractions
+import contractions  
+import pandas as pd
+from datetime import datetime
 
 def preprocess_text(text):
     # Convert text to lowercase
@@ -46,14 +48,30 @@ if st.button("Analyze Sentiment"):
     if user_input:
         prediction = predict_sentiment(user_input)
         processed_text = preprocess_text(user_input)
-        st.write(f"Processed Text: {processed_text}")
         
-        # Check the prediction and handle it
-        if prediction == 1:
-            st.write("Sentiment: Positive")
-        elif prediction == 0:
-            st.write("Sentiment: Negative")
-        else:
-            st.write(f"Sentiment: {prediction}")
+        # Determine sentiment
+        sentiment = "Positive" if prediction == 1 else "Negative"
+        
+        # Display results
+        st.write(f"Processed Text: {processed_text}")
+        st.write(f"Sentiment: {sentiment}")
+        
+        # Create a dataframe for export
+        report_data = {
+            'User Input': [user_input],
+            'Processed Text': [processed_text],
+            'Sentiment': [sentiment],
+            'Date': [datetime.now().strftime("%Y-%m-%d")],
+            'Time': [datetime.now().strftime("%H:%M:%S")]
+        }
+        report_df = pd.DataFrame(report_data)
+        
+        # Display export button
+        st.download_button(
+            label="Export Report",
+            data=report_df.to_csv(index=False),
+            file_name=f"sentiment_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv"
+        )
     else:
         st.write("Please enter some text.")

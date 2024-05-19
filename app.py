@@ -80,10 +80,13 @@ if start_date_input and start_date > max_date:
 if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
-            'Sentiment': ['Positive', 'Negative'],
+            'Sentiment': ['Positive', 'Negative', 'Neutral'],
             'Date': [datetime.now(), datetime.now(), datetime.now()]}
     df = pd.DataFrame(data)
     df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
-    df['Sentiment'] = df['Sentiment'].map({1: 'Positive', 0: 'Negative'})
-    export_filename = export_report(df, start_date, end_date)
-    st.sidebar.success(f"Report exported successfully as {export_filename}")
+    if not df.empty:
+        df['Sentiment'] = df['Sentiment'].map({1: 'Positive', 0: 'Negative'})
+        export_filename = export_report(df, start_date, end_date)
+        st.sidebar.success(f"Report exported successfully as {export_filename}")
+    else:
+        st.sidebar.warning("No data available for the selected date range.")

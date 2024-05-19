@@ -57,38 +57,46 @@ def is_english(text):
     return all(ord(char) < 128 for char in text)
 
 # Streamlit app
-# Twitter icon
+# Sidebar configuration
 st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)  # Replace "twitter_icon.png" with the actual filename and path  
-
-# Sidebar header
 st.sidebar.title("TWITTER SENTIMENT ANALYSIS")
 st.sidebar.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
 
 # Add search parameter/tweet box
 user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment analysis:", height=200)
-    
+
+# Analyze sentiment button in the sidebar
 if st.sidebar.button("Analyze Sentiment"):
     if user_input:
         try:
             # Perform language detection
             detected_language = detect(user_input)
             if detected_language != 'en':  # Check if the detected language is not English
-                st.write("Please enter text in English.")
+                st.sidebar.write("Please enter text in English.")
             else:
                 prediction = predict_sentiment(user_input)
                 processed_text = preprocess_text(user_input)
 
+                # Display the prediction result in the sidebar
+                st.sidebar.subheader("Analysis Result")
+                st.sidebar.write(f"Processed Text: {processed_text}")
+
                 # Check the prediction and handle it
                 if prediction == 1:
-                    st.write("Sentiment: Positive")
+                    st.sidebar.write("Sentiment: Positive")
                 elif prediction == 0:
-                    st.write("Sentiment: Negative")
+                    st.sidebar.write("Sentiment: Negative")
                 else:
-                    st.write(f"Sentiment: {prediction}")
+                    st.sidebar.write(f"Sentiment: {prediction}")
         except Exception as e:
-            st.write("An error occurred. Please try again.")
+            st.sidebar.write("An error occurred. Please try again.")
     else:
-        st.write("Please enter some text.")  
+        st.sidebar.write("Please enter some text.") 
+
+# Main content area
+st.title("Twitter Sentiment Analysis Dashboard")
+st.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.") 
+
 
 # Define navigation tabs
 tabs = ["All", "Positive", "Negative"]

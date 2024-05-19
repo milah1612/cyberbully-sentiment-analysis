@@ -41,7 +41,8 @@ def predict_sentiment(text):
 def export_report(df, start_date, end_date):
     filename = f"sentiment_report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
     df.to_csv(filename, index=False)
-    return filename
+    return filename 
+
 
 # Streamlit app
 st.title("Twitter Sentiment Analysis")
@@ -70,6 +71,11 @@ end_date = st.sidebar.date_input("End Date")
 max_date = datetime.now() - timedelta(days=30)
 start_date = max(start_date, max_date) if start_date else max_date
 end_date = min(end_date, datetime.now())
+
+# Convert start_date and end_date to datetime objects
+start_date = datetime.combine(start_date, datetime.min.time())
+end_date = datetime.combine(end_date, datetime.max.time())
+
 if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
@@ -77,5 +83,6 @@ if st.sidebar.button("Export Report"):
             'Date': [datetime.now(), datetime.now(), datetime.now()]}
     df = pd.DataFrame(data)
     df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
+    df['Sentiment'] = df['Sentiment'].map({1: 'Positive', 0: 'Negative'})
     export_filename = export_report(df, start_date, end_date)
     st.sidebar.success(f"Report exported successfully as {export_filename}")

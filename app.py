@@ -2,13 +2,11 @@
 # coding: utf-8
 
 # In[ ]:
-
 import streamlit as st
 from transformers import pipeline
 import pandas as pd
 from datetime import datetime, timedelta
 import pytz 
-pip install transformers
 
 # Load pretrained sentiment analysis pipeline
 sentiment_pipeline = pipeline("sentiment-analysis")

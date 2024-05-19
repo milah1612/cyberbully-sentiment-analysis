@@ -54,4 +54,4 @@ validators==0.28.1
 watchdog==4.0.0
 contractions==0.0.52
 transformers==4.36.0 
-tokenizers==0.14.1
+tokenizers==0.10.1

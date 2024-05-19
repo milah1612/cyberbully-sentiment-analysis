@@ -7,7 +7,9 @@ import re
 import joblib
 import streamlit as st
 import contractions  
-import io
+import io 
+from langdetect import detect  
+
 
 # Function to load CSS file
 def local_css(file_path):
@@ -56,7 +58,10 @@ st.title("Twitter Sentiment Analysis")
 user_input = st.text_area("Enter the tweet for sentiment analysis:")
 
 if st.button("Analyze Sentiment"):
-    if user_input:
+    if user_input: 
+        # Perform language detection
+        language = detect(user_input)
+        if language == 'en':  # Only proceed if the text is detected as English
         prediction = predict_sentiment(user_input)
         processed_text = preprocess_text(user_input)
         st.write(f"Processed Text: {processed_text}")

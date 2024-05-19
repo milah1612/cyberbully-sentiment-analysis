@@ -3,26 +3,21 @@
 
 # In[ ]:
 
+# Importing necessary libraries
 import re
 import joblib
 import streamlit as st
-import contractions 
+import contractions
 import pandas as pd
-from datetime import datetime, timedelta, timezone
-import pytz 
+from datetime import datetime, timedelta
 
-
+# Function to preprocess text
 def preprocess_text(text):
-    # Convert text to lowercase
-    text = text.lower()
-    # Remove links, mentions, non-ASCII characters, and punctuations
-    text = re.sub(r"https?\S+|www\.\S+|@[^\s]+|[^\w\s]|[\u0080-\uffff]", "", text)
-    # Expand contractions
-    text = contractions.fix(text)
-    # Remove short words (optional, depends on your use case)
+    text = text.lower()  # Convert text to lowercase
+    text = re.sub(r"https?\S+|www\.\S+|@[^\s]+|[^\w\s]|[\u0080-\uffff]", "", text)  # Remove links, mentions, non-ASCII characters, and punctuations
+    text = contractions.fix(text)  # Expand contractions
     words = text.split()
-    words = [word for word in words if len(word) > 2]
-    # Join words back into text
+    words = [word for word in words if len(word) > 2]  # Remove short words
     processed_text = ' '.join(words)
     return processed_text
 
@@ -30,26 +25,23 @@ def preprocess_text(text):
 svm_model = joblib.load('svm_model.pkl')
 tfidf_vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-# Define a function to preprocess and vectorize text
+# Function to preprocess and vectorize text
 def preprocess_and_vectorize(text):
     processed_text = preprocess_text(text)
     text_vector = tfidf_vectorizer.transform([processed_text])
     return text_vector
 
-# Define a function to make predictions
+# Function to make predictions
 def predict_sentiment(text):
     text_vector = preprocess_and_vectorize(text)
     prediction = svm_model.predict(text_vector)
-    return prediction[0]  
-
+    return prediction[0]
 
 # Function to export report
 def export_report(df, start_date, end_date):
     filename = f"sentiment_report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
     df.to_csv(filename, index=False)
     return filename
-
-
 
 # Streamlit app
 st.title("Twitter Sentiment Analysis")
@@ -69,21 +61,19 @@ if st.button("Analyze Sentiment"):
         else:
             st.write(f"Sentiment: {prediction}")
     else:
-        st.write("Please enter some text.") 
-
+        st.write("Please enter some text.")
 
 # Sidebar for report export
 st.sidebar.title("Report Export")
 start_date = st.sidebar.date_input("Start Date")
 end_date = st.sidebar.date_input("End Date")
 max_date = datetime.now() - timedelta(days=30)
-max_date = max_date.replace(hour=0, minute=0, second=0, microsecond=0)  # Set time to midnight for comparison
-start_date = max(start_date, max_date)
+start_date = max(start_date, max_date) if start_date else max_date
 end_date = min(end_date, datetime.now())
 if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
-            'Sentiment': ['Positive', 'Negative'],
+            'Sentiment': ['Positive', 'Negative', 'Neutral'],
             'Date': [datetime.now(), datetime.now(), datetime.now()]}
     df = pd.DataFrame(data)
     df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]

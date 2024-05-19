@@ -60,8 +60,9 @@ user_input = st.text_area("Enter the tweet for sentiment analysis:")
 if st.button("Analyze Sentiment"):
     if user_input:
         # Perform language detection
-        language = detect(user_input)
-        if language == 'en':  # Only proceed if the text is detected as English
+        detected_languages = detect_langs(user_input)
+        english_likelihood = next((lang.prob for lang in detected_languages if lang.lang == "en"), 0.0)
+        if english_likelihood >= 0.9:  # Set a threshold (e.g., 0.9) for the likelihood of English
             prediction = predict_sentiment(user_input)
             processed_text = preprocess_text(user_input)
             st.write(f"Processed Text: {processed_text}")

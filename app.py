@@ -41,7 +41,7 @@ def predict_sentiment(text):
     return prediction[0]
 
 def export_report(df):
-    filename = f"sentiment_report_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+    filename = f"sentiment_report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
     df.to_csv(filename, index=False)
     return filename 
 
@@ -76,14 +76,11 @@ max_date = datetime.now() - timedelta(days=30)
 start_date = datetime.combine(start_date_input, datetime.min.time()) if start_date_input else max_date
 end_date = datetime.combine(end_date_input, datetime.max.time()) if end_date_input else datetime.now()
 
-if start_date_input and start_date > max_date:
-    start_date = max_date
-
 if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
             'Sentiment': ['Positive', 'Negative', 'Neutral'],
-            'Date': [datetime.datetime.now(), datetime.datetime.now(), datetime.datetime.now()]}
+            'Date': [datetime.now(), datetime.now(), datetime.now()]}
     df = pd.DataFrame(data)
 
     # Get the file name for the exported report

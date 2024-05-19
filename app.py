@@ -79,7 +79,7 @@ end_date = datetime.combine(end_date_input, datetime.max.time()) if end_date_inp
 if st.sidebar.button("Export Report"):
     # Example DataFrame
     data = {'Text': ['Text 1', 'Text 2', 'Text 3'],
-            'Sentiment': ['Positive', 'Negative', 'Neutral'],
+            'Sentiment': ['Positive', 'Negative'],
             'Date': [datetime.now(), datetime.now(), datetime.now()]}
     df = pd.DataFrame(data)
 

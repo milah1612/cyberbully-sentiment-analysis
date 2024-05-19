@@ -52,10 +52,9 @@ if st.button("Analyze Sentiment") and user_input:
     # Detect the language of the input text
     language = detect(user_input)
 
- # Add this line to display the detected language
-  st.write(f"Detected Language: {language}") 
+    # Add this line to display the detected language
+    st.write(f"Detected Language: {language}") 
 
-    
     # Check if the language is English
     if language == 'en':
         prediction = predict_sentiment(user_input)

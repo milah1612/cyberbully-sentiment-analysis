@@ -93,19 +93,25 @@ if st.session_state.df.empty:
     st.session_state.df = load_data(csv_url) 
 
 
-# Function to add new tweet and update the dataset
 def add_new_tweet(tweet_text, df):
+    # Predict sentiment and preprocess text
     sentiment = predict_sentiment(tweet_text)
-    new_row = pd.DataFrame({"Sentiment": [sentiment], "tweet_text": [tweet_text], "Processed Text": [preprocess_text(tweet_text)]})
+    processed_text = preprocess_text(tweet_text)
+    
+    # Create a new row DataFrame for the new tweet
+    new_row = pd.DataFrame({"Sentiment": [sentiment], "tweet_text": [tweet_text], "Processed Text": [processed_text]})
+    
+    # Concatenate the new row with the existing DataFrame to create an updated DataFrame
     updated_df = pd.concat([df, new_row], ignore_index=True)
-    st.session_state.df = updated_df 
-
-    # Debug print statements
+    
+    # Update the session state DataFrame with the updated DataFrame
+    st.session_state.df = updated_df
+    
+    # Debug print statements (optional)
     print("New tweet added successfully:")
     print(new_row)
     print("Updated DataFrame:")
-    print(updated_df) 
-
+    print(updated_df)
     
     return updated_df
 

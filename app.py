@@ -13,7 +13,7 @@ import io
 from langdetect import detect
 from collections import Counter
 import plotly.express as px 
-import pathlib
+import pathlib 
 
 
 
@@ -127,15 +127,21 @@ if st.sidebar.button("Analyze Sentiment"):
         st.sidebar.write("Please enter some text.")
 
 # Function to make the dashboard
-def make_dashboard(tweet_df, bar_color):
-    col1, col2 = st.columns([50, 50])
+def make_dashboard(tweet_df, bar_color): 
+    print("DataFrame Information:")
+    print(tweet_df.info())  # Print DataFrame information for debugging
+    print("Sentiment Value Counts:")
+    print(tweet_df['Sentiment'].value_counts())  # Print sentiment value counts for debugging 
+    
+    col1, col2 = st.columns([50, 50]) 
     with col1:
         if not tweet_df.empty:
             sentiment_plot = px.histogram(tweet_df, x='Sentiment', color='Sentiment', title='Sentiment Distribution')
             sentiment_plot.update_layout(height=350, title_x=0.5)
             st.plotly_chart(sentiment_plot, use_container_width=True)
         else:
-            st.write("No data available to display sentiment distribution.")
+            st.write("No data available to display sentiment distribution.") 
+            print("DataFrame is empty!")
 
     with col2:
         if not tweet_df.empty:
@@ -145,7 +151,7 @@ def make_dashboard(tweet_df, bar_color):
                 unigram_plot.update_layout(height=350)
                 st.plotly_chart(unigram_plot, use_container_width=True)
             else:
-                st.write("No words to display.")
+                st.write("No words to display.") 
         else:
             st.write("No data available to display top occurring words.")
 

@@ -68,25 +68,33 @@ if 'tweets' not in st.session_state:
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
 
+# Function to load data from a URL
+@st.cache(allow_output_mutation=True)
+def load_data(url):
+    response = requests.get(url)
+    csv_data = StringIO(response.text)
+    df = pd.read_csv(csv_data)
+    df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
+    df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
+    return df
+
+# URL of the CSV file hosted on GitHub
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'
+
+# Load initial dataset into session state
+if st.session_state.df.empty:
+    st.session_state.df = load_data() 
+
+
 # Function to add new tweet and update the dataset
 def add_new_tweet(tweet_text, df):
     sentiment = predict_sentiment(tweet_text)
     new_row = pd.DataFrame({"Sentiment": [sentiment], "tweet_text": [tweet_text], "Processed Text": [preprocess_text(tweet_text)]})
     updated_df = pd.concat([df, new_row], ignore_index=True)
     st.session_state.df = updated_df
+    # Optionally, save back to GitHub or another storage
+    # updated_df.to_csv('tweets.csv', index=False)
     return updated_df
-
-# Read the initial dataset
-@st.cache(allow_output_mutation=True)
-def load_data():
-    df = pd.read_csv('tweets.csv')  # Replace 'tweets.csv' with your dataset filename
-    df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
-    df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
-    return df
-
-# Load initial dataset into session state
-if st.session_state.df.empty:
-    st.session_state.df = load_data()
 
 # Streamlit app
 # Sidebar configuration

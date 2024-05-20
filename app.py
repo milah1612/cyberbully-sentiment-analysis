@@ -61,7 +61,7 @@ if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
 
 # URL of the CSV file hosted on GitHub
-csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'  
+csv_url = 'https://https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/tweets.csv'  
 
 
 # Load initial dataset into session state
@@ -71,7 +71,7 @@ if st.session_state.df.empty:
 
 # Function to load data from a URL
 @st.cache(allow_output_mutation=True)
-def load_data(url):
+def load_data(csv_url):
     try:
         response = requests.get(url)  # Fixed the parameter name to url
         response.raise_for_status()  # Raise an HTTPError for bad status codes

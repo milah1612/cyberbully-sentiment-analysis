@@ -90,7 +90,8 @@ user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment 
 if st.sidebar.button("Analyze Sentiment"):
     if user_input:
         try:
-            detected_language = detect(user_input)
+            detected_language = langdetect.detect(user_input)  # Use langdetect directly
+            
             if detected_language != 'en':  # Check if the detected language is not English
                 st.sidebar.write("Please enter text in English.")
             else:
@@ -110,6 +111,8 @@ if st.sidebar.button("Analyze Sentiment"):
                     st.sidebar.write("Sentiment: Negative")
                 else:
                     st.sidebar.write(f"Sentiment: {prediction}")
+        except langdetect.lang_detect_exception.LangDetectException as e:  # Catch langdetect exceptions
+            st.sidebar.write("Language detection error. Please try again or provide text in English.")
         except Exception as e:
             st.sidebar.write("An error occurred. Please try again.")
     else:

@@ -12,7 +12,8 @@ import seaborn as sns
 import io 
 import langdetect.lang_detect_exception  # Import LangDetectException explicitl   
 from collections import Counter 
-import plotly.express as px 
+import plotly.express as px  
+import spacy
 
 
 
@@ -56,9 +57,13 @@ def predict_sentiment(text):
     prediction = svm_model.predict(text_vector)
     return prediction[0]
 
-# Function to check if text contains only English characters
-def is_english(text):
-    return all(ord(char) < 128 for char in text) 
+# Load the spacy language model for language detection
+nlp = spacy.load("en_core_web_sm")
+
+# Function to detect the language of the text
+def detect_language(text):
+    doc = nlp(text)
+    return doc.lang_
 
 
 # Function to load the dataset
@@ -90,7 +95,7 @@ user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment 
 if st.sidebar.button("Analyze Sentiment"):
     if user_input:
         try:
-            detected_language = langdetect.detect(user_input)  # Use langdetect directly
+            detected_language = detect_language(user_input)
             print("Detected language:", detected_language)
             
             if detected_language != 'en':  # Check if the detected language is not English
@@ -103,6 +108,8 @@ if st.sidebar.button("Analyze Sentiment"):
                 # Add new tweet to the dataset
                 new_tweet = {'tweet_text': user_input, 'cyberbullying_type': 'unknown', 'Processed Text': processed_text, 'Sentiment': prediction}
                 st.session_state.df = st.session_state.df.append(new_tweet, ignore_index=True)
+                print("Updated dataframe:")
+                print(st.session_state.df.tail())  # Print the last few rows of the dataframe to verify
 
                 # Display the prediction result in the sidebar
                 st.sidebar.subheader("Analysis Result")
@@ -113,17 +120,11 @@ if st.sidebar.button("Analyze Sentiment"):
                     st.sidebar.write("Sentiment: Negative")
                 else:
                     st.sidebar.write(f"Sentiment: {prediction}")
-        except langdetect.lang_detect_exception.LangDetectException as e:  # Catch langdetect exceptions
-            print("Language detection error:", e)
-            st.sidebar.write("Language detection error. Please try again or provide text in English.")
         except Exception as e:
             print("Error:", e)
             st.sidebar.write("An error occurred. Please try again.")
     else:
-        st.sidebar.write("Please enter some text.")  
-
-
-
+        st.sidebar.write("Please enter some text.") 
 
 # Function to make the dashboard
 def make_dashboard(tweet_df, bar_color):

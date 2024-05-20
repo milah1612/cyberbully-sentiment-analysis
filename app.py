@@ -13,7 +13,6 @@ import io
 from langdetect import detect   
 from collections import Counter 
 import plotly.express as px
-import helper_functions as hf  # Assuming your helper functions are in this module
 
 
 # Function to load CSS file

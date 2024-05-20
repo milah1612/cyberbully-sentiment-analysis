@@ -66,17 +66,17 @@ csv_url = 'https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/
 
 # Load initial dataset into session state
 if st.session_state.df.empty:
-    st.session_state.df = load_data(url) 
+    st.session_state.df = load_data(csv_url) 
     
 
 # Function to load data from a URL
 @st.cache(allow_output_mutation=True)
 def load_data(csv_url):
     try:
-        response = requests.get(url)  # Fixed the parameter name to url
+        response = requests.get(csv_url)  # Fixed the parameter name to url
         response.raise_for_status()  # Raise an HTTPError for bad status codes
         csv_data = StringIO(response.text)
-        df = pd.read_url(csv_url)
+        df = pd.read_csv(csv_data)
         df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
         df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
         return df 

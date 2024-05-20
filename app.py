@@ -14,7 +14,8 @@ from io import StringIO
 from langdetect import detect
 from collections import Counter
 import plotly.express as px 
-import pathlib 
+import pathlib  
+import io
 
 
 
@@ -23,22 +24,13 @@ def local_css(file_path):
     with io.open(file_path, "r") as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-
-# Load the CSS file
-local_css("styles.css")  # Update with the actual filename
-
-
+# Function to preprocess text
 def preprocess_text(text):
-    # Convert text to lowercase
     text = text.lower()
-    # Remove links, mentions, non-ASCII characters, and punctuations
     text = re.sub(r"https?\S+|www\.\S+|@[^\s]+|[^\w\s]|[\u0080-\uffff]", "", text)
-    # Expand contractions
     text = contractions.fix(text)
-    # Remove short words (optional, depends on your use case)
     words = text.split()
     words = [word for word in words if len(word) > 2]
-    # Join words back into text
     processed_text = ' '.join(words)
     return processed_text
 
@@ -62,7 +54,6 @@ def predict_sentiment(text):
 def is_english(text):
     return all(ord(char) < 128 for char in text)
 
-
 # Initialize session state
 if 'tweets' not in st.session_state:
     st.session_state.tweets = []
@@ -70,22 +61,21 @@ if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
 
 # URL of the CSV file hosted on GitHub
-csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv' 
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'
 
 # Function to load data from a URL
 @st.cache(allow_output_mutation=True)
 def load_data(url):
     response = requests.get(url)
     csv_data = StringIO(response.text)
-    df = pd.read_csv(csv_url)
+    df = pd.read_csv(csv_data)
     df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
     df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
     return df
 
 # Load initial dataset into session state
 if st.session_state.df.empty:
-    st.session_state.df = load_data(csv_url) 
-
+    st.session_state.df = load_data(csv_url)
 
 # Function to add new tweet and update the dataset
 def add_new_tweet(tweet_text, df):
@@ -93,13 +83,14 @@ def add_new_tweet(tweet_text, df):
     new_row = pd.DataFrame({"Sentiment": [sentiment], "tweet_text": [tweet_text], "Processed Text": [preprocess_text(tweet_text)]})
     updated_df = pd.concat([df, new_row], ignore_index=True)
     st.session_state.df = updated_df
-    # Optionally, save back to GitHub or another storage
-    # updated_df.to_csv('tweets.csv', index=False)
     return updated_df
+
+# Load the CSS file
+local_css("styles.css")
 
 # Streamlit app
 # Sidebar configuration
-st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)  # Replace "twitter_icon.png" with the actual filename and path
+st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)
 st.sidebar.title("TWITTER SENTIMENT ANALYSIS")
 st.sidebar.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
 
@@ -111,7 +102,7 @@ if st.sidebar.button("Analyze Sentiment"):
     if user_input:
         try:
             detected_language = detect(user_input)
-            if detected_language != 'en':  # Check if the detected language is not English
+            if detected_language != 'en':
                 st.sidebar.write("Please enter text in English.")
             else:
                 prediction = predict_sentiment(user_input)
@@ -136,21 +127,15 @@ if st.sidebar.button("Analyze Sentiment"):
         st.sidebar.write("Please enter some text.")
 
 # Function to make the dashboard
-def make_dashboard(tweet_df, bar_color): 
-    print("DataFrame Information:")
-    print(tweet_df.info())  # Print DataFrame information for debugging
-    print("Sentiment Value Counts:")
-    print(tweet_df['Sentiment'].value_counts())  # Print sentiment value counts for debugging 
-    
-    col1, col2 = st.columns([50, 50]) 
+def make_dashboard(tweet_df, bar_color):
+    col1, col2 = st.columns([50, 50])
     with col1:
         if not tweet_df.empty:
             sentiment_plot = px.histogram(tweet_df, x='Sentiment', color='Sentiment', title='Sentiment Distribution')
             sentiment_plot.update_layout(height=350, title_x=0.5)
             st.plotly_chart(sentiment_plot, use_container_width=True)
         else:
-            st.write("No data available to display sentiment distribution.") 
-            print("DataFrame is empty!")
+            st.write("No data available to display sentiment distribution.")
 
     with col2:
         if not tweet_df.empty:
@@ -160,7 +145,7 @@ def make_dashboard(tweet_df, bar_color):
                 unigram_plot.update_layout(height=350)
                 st.plotly_chart(unigram_plot, use_container_width=True)
             else:
-                st.write("No words to display.") 
+                st.write("No words to display.")
         else:
             st.write("No data available to display top occurring words.")
 

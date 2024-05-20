@@ -64,11 +64,6 @@ if 'tweets' not in st.session_state:
     st.session_state.tweets = []
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
-
-
-# Load initial dataset into session state
-if st.session_state.df.empty: 
-    st.session_state.df = load_data(csv_url) 
     
 
 # Function to load data from a URL
@@ -87,7 +82,12 @@ def load_data(csv_url):
         return pd.DataFrame()  # Return empty DataFrame in case of error  
     except Exception as ex:
         st.error(f"An unexpected error occurred: {ex}")
-        return pd.DataFrame()  # Return empty DataFrame for any other exceptions 
+        return pd.DataFrame()  # Return empty DataFrame for any other exceptions  
+
+
+# Load initial dataset into session state
+if st.session_state.df.empty: 
+    st.session_state.df = load_data(csv_url) 
 
 
 # Function to add new tweet and update the dataset

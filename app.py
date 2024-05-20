@@ -62,14 +62,19 @@ if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
     
 # URL of the CSV file hosted on GitHub
-csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'  
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'   
+
+
+# Load initial dataset into session state
+if st.session_state.df.empty: 
+    st.session_state.df = load_data(csv_url) 
 
 
 # Function to load data from a URL
 @st.cache(allow_output_mutation=True)
-def load_data(csv_url):
+def load_data(url):
     try:
-        response = requests.get(csv_url)  # Fixed the parameter name to url
+        response = requests.get(url)  # Fixed the parameter name to url
         response.raise_for_status()  # Raise an HTTPError for bad status codes
         csv_data = StringIO(response.text)
         df = pd.read_csv(csv_data)
@@ -83,10 +88,6 @@ def load_data(csv_url):
         st.error(f"An unexpected error occurred: {ex}")
         return pd.DataFrame()  # Return empty DataFrame for any other exceptions  
 
-
-# Load initial dataset into session state
-if st.session_state.df.empty: 
-    st.session_state.df = load_data(csv_url) 
 
 
 # Function to add new tweet and update the dataset

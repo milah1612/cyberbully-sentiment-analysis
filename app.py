@@ -155,9 +155,17 @@ def make_dashboard(tweet_df, bar_color):
     col1, col2 = st.columns([50, 50])
     with col1:
         if not tweet_df.empty:
-            sentiment_plot = px.histogram(tweet_df, x='Sentiment', color='Sentiment', title='Sentiment Distribution')
-            sentiment_plot.update_layout(height=350, title_x=0.5)
+            # Calculate sentiment counts for pie chart
+            sentiment_counts = tweet_df['Sentiment'].value_counts()
+            sentiment_labels = ['Positive', 'Negative']
+            sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
+            
+            # Create pie chart for sentiment distribution
+            sentiment_plot = px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution')
             st.plotly_chart(sentiment_plot, use_container_width=True)
+            st.write("Sentiment Counts:")
+            st.write(sentiment_counts)  # Display counts
+
         else:
             st.write("No data available to display sentiment distribution.")
 
@@ -165,13 +173,21 @@ def make_dashboard(tweet_df, bar_color):
         if not tweet_df.empty:
             top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
             if top_unigram:
-                unigram_plot = px.bar(x=[item[0] for item in top_unigram], y=[item[1] for item in top_unigram], title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
-                unigram_plot.update_layout(height=350)
+                # Extract words and counts for bar chart
+                words = [item[0] for item in top_unigram]
+                counts = [item[1] for item in top_unigram]
+
+                # Create bar chart for top occurring words
+                unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
                 st.plotly_chart(unigram_plot, use_container_width=True)
+                st.write("Top 10 Occurring Words and Counts:")
+                for word, count in zip(words, counts):
+                    st.write(f"{word}: {count}")  # Display word and count
             else:
                 st.write("No words to display.")
         else:
-            st.write("No data available to display top occurring words.")
+            st.write("No data available to display top occurring words.") 
+            
 
     col1, col2 = st.columns([50, 50])
     with col1:

@@ -236,13 +236,13 @@ selected_tab = st.radio("Select sentiment:", ["All", "Positive 😊", "Negative 
 if selected_tab == "All":
     if "df" in st.session_state and not st.session_state.df.empty:
         tweet_df = st.session_state.df
-        st.dataframe(tweet_df[["Sentiment", "tweet_text"]])
+        st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
     else:
         st.write("No tweets to display.")
 
 elif selected_tab == "Positive 😊":
     if "df" in st.session_state and not st.session_state.df.empty:
-        tweet_df = st.session_state.df.query("Sentiment == 1")
+        tweet_df = st.session_state.df.query("Sentiment == 1")[["Sentiment", "Processed Text"]]
         st.write("### Positive Sentiment Analysis")
         make_dashboard(tweet_df, bar_color="#1F77B4")
     else:
@@ -250,7 +250,7 @@ elif selected_tab == "Positive 😊":
 
 else:
     if "df" in st.session_state and not st.session_state.df.empty:
-        tweet_df = st.session_state.df.query("Sentiment == 0")
+        tweet_df = st.session_state.df.query("Sentiment == 0")[["Sentiment", "Processed Text"]]
         st.write("### Negative Sentiment Analysis")
         make_dashboard(tweet_df, bar_color="#FF7F0E")
     else:

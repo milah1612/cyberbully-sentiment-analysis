@@ -74,7 +74,7 @@ def load_data(url):
         response = requests.get(url)  # Fixed the parameter name to url
         response.raise_for_status()  # Raise an HTTPError for bad status codes
         csv_data = StringIO(response.text)
-        df = pd.read_csv(csv_url)
+        df = pd.read_url(csv_url)
         df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
         df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
         return df 

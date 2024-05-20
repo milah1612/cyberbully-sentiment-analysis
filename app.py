@@ -83,7 +83,7 @@ csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-anal
 
 # Load initial dataset into session state
 if st.session_state.df.empty:
-    st.session_state.df = load_data() 
+    st.session_state.df = load_data(csv_url) 
 
 
 # Function to add new tweet and update the dataset

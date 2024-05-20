@@ -203,6 +203,10 @@ def make_dashboard(tweet_df, bar_color):
     col1, col2 = st.columns([50, 50])
     with col1:
         if not tweet_df.empty:
+            # Debug print processed text
+            st.write("Processed Text:")
+            st.write(tweet_df['Processed Text'].tolist())
+            
             bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
             if bigrams:
                 bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
@@ -211,7 +215,9 @@ def make_dashboard(tweet_df, bar_color):
             else:
                 st.write("No bigrams to display.")
         else:
-            st.write("No data available to display top occurring bigrams.")
+            st.write("No data available to display top occurring bigrams.") 
+
+
 
 # Increase the font size of text inside the tabs
 adjust_tab_font = """

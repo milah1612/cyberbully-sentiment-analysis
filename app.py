@@ -130,22 +130,37 @@ if st.sidebar.button("Analyze Sentiment"):
 def make_dashboard(tweet_df, bar_color):
     col1, col2 = st.columns([50, 50])
     with col1:
-        sentiment_plot = px.histogram(tweet_df, x='Sentiment', color='Sentiment', title='Sentiment Distribution')
-        sentiment_plot.update_layout(height=350, title_x=0.5)
-        st.plotly_chart(sentiment_plot, use_container_width=True)
+        if not tweet_df.empty:
+            sentiment_plot = px.histogram(tweet_df, x='Sentiment', color='Sentiment', title='Sentiment Distribution')
+            sentiment_plot.update_layout(height=350, title_x=0.5)
+            st.plotly_chart(sentiment_plot, use_container_width=True)
+        else:
+            st.write("No data available to display sentiment distribution.")
 
     with col2:
-        top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
-        unigram_plot = px.bar(x=[item[0] for item in top_unigram], y=[item[1] for item in top_unigram], title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
-        unigram_plot.update_layout(height=350)
-        st.plotly_chart(unigram_plot, use_container_width=True)
+        if not tweet_df.empty:
+            top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
+            if top_unigram:
+                unigram_plot = px.bar(x=[item[0] for item in top_unigram], y=[item[1] for item in top_unigram], title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
+                unigram_plot.update_layout(height=350)
+                st.plotly_chart(unigram_plot, use_container_width=True)
+            else:
+                st.write("No words to display.")
+        else:
+            st.write("No data available to display top occurring words.")
 
     col1, col2 = st.columns([50, 50])
     with col1:
-        bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1))]).most_common(10)
-        bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
-        bigram_plot.update_layout(height=350)
-        st.plotly_chart(bigram_plot, use_container_width=True)
+        if not tweet_df.empty:
+            bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
+            if bigrams:
+                bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
+                bigram_plot.update_layout(height=350)
+                st.plotly_chart(bigram_plot, use_container_width=True)
+            else:
+                st.write("No bigrams to display.")
+        else:
+            st.write("No data available to display top occurring bigrams.")
 
 # Increase the font size of text inside the tabs
 adjust_tab_font = """

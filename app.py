@@ -1,30 +1,23 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
 import re
 import joblib
 import streamlit as st
-import contractions   
+import contractions
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io 
-import langdetect.lang_detect_exception  # Import LangDetectException explicitl   
-from collections import Counter 
-import plotly.express as px 
-import spacy
-
+import io
+import langdetect.lang_detect_exception  # Import LangDetectException explicitly
+from collections import Counter
+import plotly.express as px
 
 # Function to load CSS file
 def local_css(file_path):
     with io.open(file_path, "r") as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)  
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 
 # Load the CSS file
-local_css("styles.css")  # Update with the actual filename    
-
+local_css("styles.css")  # Update with the actual filename
 
 def preprocess_text(text):
     # Convert text to lowercase
@@ -56,15 +49,6 @@ def predict_sentiment(text):
     prediction = svm_model.predict(text_vector)
     return prediction[0]
 
-# Load the spacy language model for language detection
-nlp = spacy.load("en_core_web_sm")
-
-# Function to detect the language of the text
-def detect_language(text):
-    doc = nlp(text)
-    return doc.lang_
-
-
 # Function to load the dataset
 @st.cache
 def load_data():
@@ -79,11 +63,11 @@ if 'df' not in st.session_state or st.session_state.df.empty:
 
 # Initialize session state for tweets
 if 'tweets' not in st.session_state:
-    st.session_state.tweets = []  
-    
+    st.session_state.tweets = []
+
 # Streamlit app
 # Sidebar configuration
-st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)  # Replace with actual filename and path  
+st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)  # Replace with actual filename and path
 st.sidebar.title("TWITTER SENTIMENT ANALYSIS")
 st.sidebar.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
 
@@ -94,21 +78,18 @@ user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment 
 if st.sidebar.button("Analyze Sentiment"):
     if user_input:
         try:
-            detected_language = detect_language(user_input)
-            print("Detected language:", detected_language)
-            
+            # Attempt language detection
+            detected_language = langdetect.detect(user_input)
+
             if detected_language != 'en':  # Check if the detected language is not English
                 st.sidebar.write("Please enter text in English.")
             else:
                 prediction = predict_sentiment(user_input)
                 processed_text = preprocess_text(user_input)
-                print("Processed text:", processed_text)
 
                 # Add new tweet to the dataset
                 new_tweet = {'tweet_text': user_input, 'cyberbullying_type': 'unknown', 'Processed Text': processed_text, 'Sentiment': prediction}
                 st.session_state.df = st.session_state.df.append(new_tweet, ignore_index=True)
-                print("Updated dataframe:")
-                print(st.session_state.df.tail())  # Print the last few rows of the dataframe to verify
 
                 # Display the prediction result in the sidebar
                 st.sidebar.subheader("Analysis Result")
@@ -120,10 +101,9 @@ if st.sidebar.button("Analyze Sentiment"):
                 else:
                     st.sidebar.write(f"Sentiment: {prediction}")
         except Exception as e:
-            print("Error:", e)
-            st.sidebar.write("An error occurred. Please try again.")
+            st.sidebar.write("Error: Language detection failed or an unexpected error occurred. Please try again.")
     else:
-        st.sidebar.write("Please enter some text.") 
+        st.sidebar.write("Please enter some text.")
 
 # Function to make the dashboard
 def make_dashboard(tweet_df, bar_color):

@@ -80,7 +80,7 @@ def load_data(url):
         st.error(f"Failed to fetch data from URL: {url}. Error: {e}")
         return pd.DataFrame()  # Return empty DataFrame in case of error  
     except Exception as ex:
-        st.error(f"An unexpected error occurred: {ex}")
+        st.error(f"An unexpected error occurred: {e}")
         return pd.DataFrame()  # Return empty DataFrame for any other exceptions   
 
 

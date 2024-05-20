@@ -64,7 +64,7 @@ if 'df' not in st.session_state:
 
 
 # Function to load data from a URL
-@st.cache(allow_output_mutation=True)
+@st.experimental_singleton
 def load_data(url):
     try:
         response = requests.get(url)  # Fixed the parameter name to url

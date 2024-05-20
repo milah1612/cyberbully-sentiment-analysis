@@ -91,12 +91,14 @@ if st.sidebar.button("Analyze Sentiment"):
     if user_input:
         try:
             detected_language = langdetect.detect(user_input)  # Use langdetect directly
+            print("Detected language:", detected_language)
             
             if detected_language != 'en':  # Check if the detected language is not English
                 st.sidebar.write("Please enter text in English.")
             else:
                 prediction = predict_sentiment(user_input)
                 processed_text = preprocess_text(user_input)
+                print("Processed text:", processed_text)
 
                 # Add new tweet to the dataset
                 new_tweet = {'tweet_text': user_input, 'cyberbullying_type': 'unknown', 'Processed Text': processed_text, 'Sentiment': prediction}
@@ -112,11 +114,16 @@ if st.sidebar.button("Analyze Sentiment"):
                 else:
                     st.sidebar.write(f"Sentiment: {prediction}")
         except langdetect.lang_detect_exception.LangDetectException as e:  # Catch langdetect exceptions
+            print("Language detection error:", e)
             st.sidebar.write("Language detection error. Please try again or provide text in English.")
         except Exception as e:
+            print("Error:", e)
             st.sidebar.write("An error occurred. Please try again.")
     else:
-        st.sidebar.write("Please enter some text.") 
+        st.sidebar.write("Please enter some text.")  
+
+
+
 
 # Function to make the dashboard
 def make_dashboard(tweet_df, bar_color):

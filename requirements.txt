@@ -51,7 +51,8 @@ tornado==6.4
 tqdm==4.66.4
 tzdata==2024.1
 tzlocal==5.2
-urllib3==2.2.1
+urllib3==2.2.1 
+ut==0.2.0
 validators==0.28.1
 watchdog==4.0.0
 contractions==0.0.52 

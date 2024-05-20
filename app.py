@@ -4,7 +4,8 @@
 # In[ ]:
 import re
 import joblib
-import streamlit as st
+import streamlit as st 
+import requests
 import contractions
 import pandas as pd
 import matplotlib.pyplot as plt

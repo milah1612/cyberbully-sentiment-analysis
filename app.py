@@ -52,7 +52,12 @@ def predict_sentiment(text):
 
 # Function to check if text contains only English characters
 def is_english(text):
-    return all(ord(char) < 128 for char in text)
+    return all(ord(char) < 128 for char in text) 
+
+
+# URL of the CSV file hosted on GitHub
+csv_url = 'https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/tweets.csv'   
+
 
 # Initialize session state
 if 'tweets' not in st.session_state:
@@ -60,12 +65,9 @@ if 'tweets' not in st.session_state:
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
 
-# URL of the CSV file hosted on GitHub
-csv_url = 'https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/tweets.csv'  
-
 
 # Load initial dataset into session state
-if st.session_state.df.empty:
+if st.session_state.df.empty: 
     st.session_state.df = load_data(csv_url) 
     
 

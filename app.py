@@ -71,7 +71,10 @@ def load_data(url):
     df = pd.read_csv(csv_url)
     df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
     df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
-    return df
+    return df 
+except requests.HTTPError as e:
+        st.error(f"Failed to fetch data from URL: {url}. Error: {e}")
+        return pd.DataFrame()  # Return empty DataFrame in case of error
 
 # Load initial dataset into session state
 if st.session_state.df.empty:

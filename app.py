@@ -90,13 +90,13 @@ csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-anal
 
 # Initialize session state if it doesn't exist
 if "df" not in st.session_state:
-    st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text']) 
-     print("DataFrame initialized in session state")
+    st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
+    print("DataFrame initialized in session state")
 
 # Load initial dataset into session state if it's empty
 if st.session_state.df.empty:
-    st.session_state.df = load_data(csv_url) 
-    print("DataFrame loaded into session state")
+    st.session_state.df = load_data(csv_url)
+    print("DataFrame loaded into session state") 
     
 
 

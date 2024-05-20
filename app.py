@@ -71,7 +71,8 @@ if st.session_state.df.empty:
 @st.cache(allow_output_mutation=True)
 def load_data(url):
     try:
-        response = requests.get(url)
+        response = requests.get(url)  # Fixed the parameter name to url
+        response.raise_for_status()  # Raise an HTTPError for bad status codes
         csv_data = StringIO(response.text)
         df = pd.read_csv(csv_url)
         df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
@@ -80,6 +81,9 @@ def load_data(url):
     except requests.HTTPError as e: 
         st.error(f"Failed to fetch data from URL: {url}. Error: {e}")
         return pd.DataFrame()  # Return empty DataFrame in case of error  
+    except Exception as ex:
+        st.error(f"An unexpected error occurred: {ex}")
+        return pd.DataFrame()  # Return empty DataFrame for any other exceptions
 
 
 # Function to add new tweet and update the dataset

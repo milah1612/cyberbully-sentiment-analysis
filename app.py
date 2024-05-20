@@ -96,7 +96,15 @@ def add_new_tweet(tweet_text, df):
     sentiment = predict_sentiment(tweet_text)
     new_row = pd.DataFrame({"Sentiment": [sentiment], "tweet_text": [tweet_text], "Processed Text": [preprocess_text(tweet_text)]})
     updated_df = pd.concat([df, new_row], ignore_index=True)
-    st.session_state.df = updated_df
+    st.session_state.df = updated_df 
+
+    # Debug print statements
+    print("New tweet added successfully:")
+    print(new_row)
+    print("Updated DataFrame:")
+    print(updated_df) 
+
+    
     return updated_df
 
 # Load the CSS file

@@ -10,7 +10,7 @@ import contractions
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io
+from io import StringIO
 from langdetect import detect
 from collections import Counter
 import plotly.express as px 

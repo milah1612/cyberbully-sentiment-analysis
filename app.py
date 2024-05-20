@@ -13,7 +13,8 @@ import io
 from langdetect import detect   
 from collections import Counter 
 import plotly.express as px 
-from hf import plot_sentiment
+from hf import plot_sentiment, get_top_n_gram  
+
 
 # Function to load CSS file
 def local_css(file_path):

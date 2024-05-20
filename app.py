@@ -56,7 +56,7 @@ def is_english(text):
 
 
 # URL of the CSV file hosted on GitHub
-csv_url = 'https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/tweets.csv'   
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'  
 
 
 # Initialize session state

@@ -12,8 +12,7 @@ import seaborn as sns
 import io 
 import langdetect.lang_detect_exception  # Import LangDetectException explicitl   
 from collections import Counter 
-import plotly.express as px  
-import spacy
+import plotly.express as px 
 
 
 

@@ -66,7 +66,7 @@ csv_url = 'https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/
 
 # Load initial dataset into session state
 if st.session_state.df.empty:
-    st.session_state.df = load_data(csv_url) 
+    st.session_state.df = load_data(url) 
     
 
 # Function to load data from a URL

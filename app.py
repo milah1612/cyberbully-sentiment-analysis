@@ -66,15 +66,17 @@ csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-anal
 # Function to load data from a URL
 @st.cache(allow_output_mutation=True)
 def load_data(url):
-    response = requests.get(url)
-    csv_data = StringIO(response.text)
-    df = pd.read_csv(csv_url)
-    df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
-    df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
-    return df 
-except requests.HTTPError as e: 
-   st.error(f"Failed to fetch data from URL: {url}. Error: {e}")
-   return pd.DataFrame()  # Return empty DataFrame in case of error
+    try:
+        response = requests.get(url)
+        csv_data = StringIO(response.text)
+        df = pd.read_csv(csv_data)
+        df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
+        df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
+        return df 
+    except requests.HTTPError as e: 
+        st.error(f"Failed to fetch data from URL: {url}. Error: {e}")
+        return pd.DataFrame()  # Return empty DataFrame in case of error  
+
 
 # Load initial dataset into session state
 if st.session_state.df.empty:

@@ -73,7 +73,7 @@ def load_data(url):
     try:
         response = requests.get(url)
         csv_data = StringIO(response.text)
-        df = pd.read_csv(csv_data)
+        df = pd.read_csv(csv_url)
         df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
         df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
         return df 

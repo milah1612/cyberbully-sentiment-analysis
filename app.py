@@ -55,16 +55,15 @@ def is_english(text):
     return all(ord(char) < 128 for char in text) 
 
 
-# URL of the CSV file hosted on GitHub
-csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'  
-
-
 # Initialize session state
 if 'tweets' not in st.session_state:
     st.session_state.tweets = []
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
     
+# URL of the CSV file hosted on GitHub
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'  
+
 
 # Function to load data from a URL
 @st.cache(allow_output_mutation=True)

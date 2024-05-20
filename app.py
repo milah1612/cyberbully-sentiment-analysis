@@ -72,7 +72,12 @@ def load_data(url):
         csv_data = StringIO(response.text)
         df = pd.read_csv(csv_data)
         df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
-        df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
+        df['Processed Text'] = df['tweet_text'].apply(preprocess_text) 
+
+        # Save DataFrame to CSV
+        df.to_csv("tweets.csv", index=False) 
+
+        
         return df 
     except requests.HTTPError as e: 
         st.error(f"Failed to fetch data from URL: {url}. Error: {e}")

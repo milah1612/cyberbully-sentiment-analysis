@@ -12,7 +12,8 @@ import seaborn as sns
 import io
 from langdetect import detect
 from collections import Counter
-import plotly.express as px
+import plotly.express as px 
+import pathlib
 
 
 
@@ -89,6 +90,9 @@ def load_data():
     df = pd.read_csv('tweets.csv')  # Replace 'tweets.csv' with your dataset filename
     return df
 
+# Load initial dataset into session state
+if st.session_state.df.empty:
+    st.session_state.df = load_data()
 
 # Streamlit app
 # Sidebar configuration
@@ -122,11 +126,13 @@ if st.sidebar.button("Analyze Sentiment"):
                     st.sidebar.write("Sentiment: Negative")
                 else:
                     st.sidebar.write(f"Sentiment: {prediction}")
+
+                # Add the new tweet to the dataset
+                add_new_tweet(user_input, st.session_state.df)
         except Exception as e:
             st.sidebar.write("An error occurred. Please try again.")
     else:
         st.sidebar.write("Please enter some text.")
-
 
 # Function to make the dashboard
 def make_dashboard(tweet_df, bar_color):

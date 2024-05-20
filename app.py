@@ -68,18 +68,18 @@ if 'tweets' not in st.session_state:
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
 
+# URL of the CSV file hosted on GitHub
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv' 
+
 # Function to load data from a URL
 @st.cache(allow_output_mutation=True)
 def load_data(url):
     response = requests.get(url)
     csv_data = StringIO(response.text)
-    df = pd.read_csv(csv_data)
+    df = pd.read_csv(csv_url)
     df['Sentiment'] = df['tweet_text'].apply(predict_sentiment)
     df['Processed Text'] = df['tweet_text'].apply(preprocess_text)
     return df
-
-# URL of the CSV file hosted on GitHub
-csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'
 
 # Load initial dataset into session state
 if st.session_state.df.empty:

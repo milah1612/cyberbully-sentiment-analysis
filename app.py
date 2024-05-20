@@ -10,7 +10,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io 
-from langdetect import detect   
+import langdetect.lang_detect_exception  # Import LangDetectException explicitl   
 from collections import Counter 
 import plotly.express as px 
 

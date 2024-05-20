@@ -63,7 +63,7 @@ def is_english(text):
 # Function to load the dataset
 @st.cache
 def load_data():
-    df = pd.read_csv('path_to_your_dataset.csv')  # Replace with your dataset path
+    df = pd.read_csv('tweets.csv')  # Replace with your dataset path
     return df
 
 # Load initial dataset

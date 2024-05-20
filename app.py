@@ -61,7 +61,7 @@ if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
 
 # URL of the CSV file hosted on GitHub
-csv_url = 'https://https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/tweets.csv'  
+csv_url = 'https://github.com/milah1612/cyberbully-sentiment-analysis/edit/main/tweets.csv'  
 
 
 # Load initial dataset into session state

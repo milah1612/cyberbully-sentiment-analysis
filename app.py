@@ -83,7 +83,7 @@ def load_data(url):
 
 
 # URL of the CSV file hosted on GitHub
-csv_url = 'https://github.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'   
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv?token=GHSAT0AAAAAACSQ2QUHAAWF2UX6XTZFW272ZSLYXNQ'   
 
 
 # Load initial dataset into session state

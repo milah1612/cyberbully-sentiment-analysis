@@ -129,7 +129,7 @@ def make_dashboard(tweet_df, bar_color):
         if top_unigram:
             words = [item[0] for item in top_unigram]
             counts = [item[1] for item in top_unigram]
-            unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color_discrete_sequence=[bar_color])
+            unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color_discrete_sequence=[bar_color], xaxis_title='Words', yaxis_title='Count')
             st.plotly_chart(unigram_plot, use_container_width=False)
         else:
             st.write("No words to display.") 
@@ -140,7 +140,7 @@ def make_dashboard(tweet_df, bar_color):
         # Calculate top occurring bigrams and display in a bar plot
         bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
         if bigrams:
-            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title='Top 10 Occurring Bigrams', color_discrete_sequence=[bar_color])
+            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title='Top 10 Occurring Bigrams', color_discrete_sequence=[bar_color], xaxis_title='Bi-Words', yaxis_title='Count')
             bigram_plot.update_layout(height=350)
             st.plotly_chart(bigram_plot, use_container_width=False)
         else:

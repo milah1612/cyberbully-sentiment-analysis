@@ -62,7 +62,6 @@ if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
 
 
-
 # Function to load data from a URL
 @st.experimental_singleton
 def load_data(url):
@@ -80,24 +79,17 @@ def load_data(url):
         st.error(f"Failed to fetch data from URL: {url}. Error: {e}")
         return pd.DataFrame()  # Return empty DataFrame in case of error  
     except Exception as ex:
-        st.error(f"An unexpected error occurred: {e}")
+        st.error(f"An unexpected error occurred: {ex}")
         return pd.DataFrame()  # Return empty DataFrame for any other exceptions   
 
 
 # URL of the CSV file hosted on GitHub
 csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'   
 
-
-# Initialize session state if it doesn't exist
-if "df" not in st.session_state:
-    st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
-    print("DataFrame initialized in session state")
-
 # Load initial dataset into session state if it's empty
 if st.session_state.df.empty:
     st.session_state.df = load_data(csv_url)
     print("DataFrame loaded into session state") 
-    
 
 
 def add_new_tweet(tweet_text, df):

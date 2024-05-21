@@ -143,7 +143,11 @@ def make_dashboard(tweet_df, bar_color):
             bigram_plot.update_layout(height=350)
             st.plotly_chart(bigram_plot, use_container_width=True)
         else:
-            st.write("No bigrams to display.")
+            st.write("No bigrams to display.") 
+
+# Display the DataFrame containing sentiment and processed text
+st.write("Sentiment and Processed Text:")
+st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
 
 # Initialize session state
 if 'df' not in st.session_state:

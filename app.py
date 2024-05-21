@@ -120,24 +120,25 @@ def make_dashboard(tweet_df, bar_color):
         # Create bar plot for sentiment distribution
         fig_bar = go.Figure(data=[go.Bar(x=sentiment_counts.index, y=sentiment_counts, marker_color=bar_color)])
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
-        st.plotly_chart(fig_bar, use_container_width=True) 
+        st.plotly_chart(fig_bar, use_container_width=True)    
+
 
 # Display top occurring words
-with col2:
+  col1, col2 = st.columns(2)
+  with col2:
     # Calculate top occurring unigrams and display in a bar plot
     top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
     if top_unigram:
         words = [item[0] for item in top_unigram]
         counts = [item[1] for item in top_unigram]
-        unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color_discrete_sequence=[bar_color])
-        unigram_plot.update_layout(xaxis_title='Words', yaxis_title='Count')  # Add axis titles
+        unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color_discrete_sequence=[bar_color], xaxis_title='Words', yaxis_title='Count')
         st.plotly_chart(unigram_plot, use_container_width=False)
     else:
         st.write("No words to display.") 
 
     # Display top occurring bigrams
-col1, col2 = st.columns(2)
-with col1:
+   col1, col2 = st.columns(2)
+   with col1:
     # Calculate top occurring bigrams and display in a bar plot
     bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
     if bigrams:

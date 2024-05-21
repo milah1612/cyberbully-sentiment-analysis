@@ -122,7 +122,7 @@ def make_dashboard(tweet_df, bar_color):
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
         st.plotly_chart(fig_bar, use_container_width=True) 
 
-    # Display top occurring words
+# Display top occurring words
 with col2:
     # Calculate top occurring unigrams and display in a bar plot
     top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)

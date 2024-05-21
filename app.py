@@ -129,13 +129,12 @@ def make_dashboard(tweet_df, bar_color):
             words = [item[0] for item in top_unigram]
             counts = [item[1] for item in top_unigram]
             fig_unigram = go.Figure(data=[go.Bar(x=words, y=counts, marker_color=bar_color)])
-            fig_unigram.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
+            fig_unigram.update_layout(title='Top 10 Ocurring Keyword', plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
             st.plotly_chart(fig_unigram, use_container_width=False)
         else:
             st.write("No words to display.") 
 
     # Display top occurring bigrams
-    st.write("### Top 10 Occurring Bigrams")
     col1, col2 = st.columns(2)
     with col1:
         bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
@@ -143,7 +142,7 @@ def make_dashboard(tweet_df, bar_color):
             bigram_words = [item[0] for item in bigrams]
             bigram_counts = [item[1] for item in bigrams]
             fig_bigram = go.Figure(data=[go.Bar(x=bigram_words, y=bigram_counts, marker_color=bar_color)])
-            fig_bigram.update_layout(height=350, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
+            fig_bigram.update_layout(title='Top 10 Occurring Bigrams', height=350, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
             st.plotly_chart(fig_bigram, use_container_width=False)
         else:
             st.write("No bigrams to display.")

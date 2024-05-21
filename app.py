@@ -113,32 +113,32 @@ def make_dashboard(tweet_df, bar_color):
     st.write("### Sentiment Counts")
     col1, col2 = st.columns(2)
     with col1:
+        # Calculate sentiment counts and display in a DataFrame
         sentiment_counts = tweet_df['Sentiment'].value_counts()
         st.write(sentiment_counts) 
 
-        sentiment_labels = ['Positive', 'Negative']
-        
         # Create bar plot for sentiment distribution
-        fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_counts, marker_color=bar_color)])
+        fig_bar = go.Figure(data=[go.Bar(x=sentiment_counts.index, y=sentiment_counts, marker_color=bar_color)])
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
-
-        # Plot the figure
         st.plotly_chart(fig_bar, use_container_width=True) 
 
     # Display top occurring words
     with col2:
+        # Calculate top occurring unigrams and display in a bar plot
         top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
         if top_unigram:
             words = [item[0] for item in top_unigram]
             counts = [item[1] for item in top_unigram]
-            unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occuring Words', color_discrete_sequence=[bar_color])
+            unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color_discrete_sequence=[bar_color])
             st.plotly_chart(unigram_plot, use_container_width=False)
         else:
             st.write("No words to display.") 
 
     # Display top occurring bigrams
+    st.write("### Top 10 Occurring Bigrams")
     col1, col2 = st.columns(2)
     with col1:
+        # Calculate top occurring bigrams and display in a bar plot
         bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
         if bigrams:
             bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title='Top 10 Occurring Bigrams', color_discrete_sequence=[bar_color])
@@ -148,13 +148,13 @@ def make_dashboard(tweet_df, bar_color):
             st.write("No bigrams to display.")
 
     # Set the display width for DataFrame columns
-   pd.options.display.max_colwidth = 1000  # Adjust the value as needed
+    pd.options.display.max_colwidth = 1000  # Adjust the value as needed 
 
-   # Define the title
-   title_sentiment_processed_text = "Sentiment and Processed Text"
+    # Define the title
+    title_sentiment_processed_text = "Sentiment and Processed Text"
 
-   # Display sentiment and processed text table
-   st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
+    # Display sentiment and processed text table
+    st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
     
  
 # Initialize session state

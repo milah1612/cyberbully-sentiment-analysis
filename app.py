@@ -126,32 +126,32 @@ def make_dashboard(tweet_df, bar_color):
         st.plotly_chart(fig_bar, use_container_width=True) 
 
     # Display top occurring words
-st.write("### Top 10 Occurring Words")
-with col2:
-    top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
-    if top_unigram:
-        words = [item[0] for item in top_unigram]
-        counts = [item[1] for item in top_unigram]
-        unigram_plot = px.bar(x=words, y=counts, color_discrete_sequence=[bar_color])
-        st.plotly_chart(unigram_plot, use_container_width=True)
-    else:
-        st.write("No words to display.") 
+    st.write("### Top 10 Occurring Words")
+    with col2:
+        top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
+        if top_unigram:
+            words = [item[0] for item in top_unigram]
+            counts = [item[1] for item in top_unigram]
+            unigram_plot = px.bar(x=words, y=counts, color_discrete_sequence=[bar_color])
+            st.plotly_chart(unigram_plot, use_container_width=True)
+        else:
+            st.write("No words to display.") 
 
-# Display top occurring bigrams
-st.write("### Top 10 Occurring Bigrams")
-col1, col2 = st.columns(2)
-with col1:
-    bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
-    if bigrams:
-        bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], color_discrete_sequence=[bar_color])
-        bigram_plot.update_layout(height=350)
-        st.plotly_chart(bigram_plot, use_container_width=True)
-    else:
-        st.write("No bigrams to display.")
+    # Display top occurring bigrams
+    st.write("### Top 10 Occurring Bigrams")
+    col1, col2 = st.columns(2)
+    with col1:
+        bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
+        if bigrams:
+            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], color_discrete_sequence=[bar_color])
+            bigram_plot.update_layout(height=350)
+            st.plotly_chart(bigram_plot, use_container_width=True)
+        else:
+            st.write("No bigrams to display.")
 
     # Display sentiment and processed text table
     st.write("### Sentiment and Processed Text")
-    st.dataframe(tweet_df[["Sentiment", "Processed Text"]]) 
+    st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
     
  
 # Initialize session state

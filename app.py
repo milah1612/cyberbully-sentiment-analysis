@@ -118,16 +118,13 @@ def make_dashboard(tweet_df, bar_color):
         st.write(sentiment_counts) 
 
         sentiment_labels = ['Positive', 'Negative']
-        sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
-        st.write("Sentiment Values:")
-        st.write(sentiment_values)
         
         # Create bar plot for sentiment distribution
         fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_counts, marker_color=bar_color)])
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
 
         # Plot the figure
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, use_container_width=True) 
 
     # Display top occurring words
     st.write("### Top 10 Occurring Words")
@@ -136,7 +133,7 @@ def make_dashboard(tweet_df, bar_color):
         if top_unigram:
             words = [item[0] for item in top_unigram]
             counts = [item[1] for item in top_unigram]
-            unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
+            unigram_plot = px.bar(x=words, y=counts, color_discrete_sequence=[bar_color])
             st.plotly_chart(unigram_plot, use_container_width=True)
         else:
             st.write("No words to display.")
@@ -147,7 +144,7 @@ def make_dashboard(tweet_df, bar_color):
     with col1:
         bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
         if bigrams:
-            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
+            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], color_discrete_sequence=[bar_color])
             bigram_plot.update_layout(height=350)
             st.plotly_chart(bigram_plot, use_container_width=True)
         else:

@@ -110,7 +110,6 @@ def make_dashboard(tweet_df, bar_color):
     st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
     # Display sentiment distribution
-    st.write("### Sentiment Counts")
     col1, col2 = st.columns(2)
     with col1:
         # Calculate sentiment counts and display in a DataFrame
@@ -135,7 +134,6 @@ def make_dashboard(tweet_df, bar_color):
             st.write("No words to display.") 
 
     # Display top occurring bigrams
-    st.write("### Top 10 Occurring Bigrams")
     col1, col2 = st.columns(2)
     with col1:
         # Calculate top occurring bigrams and display in a bar plot
@@ -148,12 +146,10 @@ def make_dashboard(tweet_df, bar_color):
             st.write("No bigrams to display.")
 
     # Set the display width for DataFrame columns
-    pd.options.display.max_colwidth = 1000  # Adjust the value as needed 
+    pd.options.display.max_colwidth = 1000  # Adjust the value as needed
 
-    # Define the title
-    title_sentiment_processed_text = "Sentiment and Processed Text"
-
-    # Display sentiment and processed text table
+    # Display sentiment and processed text table 
+    st.write("### Sentiment and Processed Text")
     st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
     
  

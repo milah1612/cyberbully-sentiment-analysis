@@ -173,7 +173,11 @@ elif selected_tab == "Positive 😊":
         tweet_df = st.session_state.df.query("Sentiment == 1")[["Sentiment", "Processed Text"]]
         st.write("### Positive Sentiment Analysis")
         
-        # Print the filtered dataframe for positive sentiment analysis
+        # Print unique values of the "Sentiment" column
+        st.write("Unique Sentiment Values:")
+        st.write(tweet_df["Sentiment"].unique())
+        
+        # Print the entire dataframe for positive sentiment analysis
         st.write("Filtered DataFrame for Positive Sentiment:")
         st.write(tweet_df)
         
@@ -186,7 +190,11 @@ elif selected_tab == "Negative ☹️":
         tweet_df = st.session_state.df.query("Sentiment == 0")[["Sentiment", "Processed Text"]]
         st.write("### Negative Sentiment Analysis")
         
-        # Print the filtered dataframe for negative sentiment analysis
+        # Print unique values of the "Sentiment" column
+        st.write("Unique Sentiment Values:")
+        st.write(tweet_df["Sentiment"].unique())
+        
+        # Print the entire dataframe for negative sentiment analysis
         st.write("Filtered DataFrame for Negative Sentiment:")
         st.write(tweet_df)
         

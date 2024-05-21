@@ -102,50 +102,44 @@ def add_new_tweet(tweet_text, df):
 
 # Function to make the dashboard
 def make_dashboard(tweet_df, bar_color):
-    col1, col2 = st.columns([50, 50])
-    with col1:
-        if not tweet_df.empty:
-            # Calculate sentiment counts for pie chart
-            sentiment_counts = tweet_df['Sentiment'].value_counts()
-            sentiment_labels = ['Positive', 'Negative']
-            sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
-            
-            # Create pie chart for sentiment distribution
-            sentiment_plot = px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution')
-            st.plotly_chart(sentiment_plot, use_container_width=True)
+    if tweet_df.empty:
+        st.write("No data available to display.")
+        return
 
-        else:
-            st.write("No data available to display sentiment distribution.")
+    col1, col2 = st.columns(2)
+    with col1:
+        # Calculate sentiment counts for pie chart
+        sentiment_counts = tweet_df['Sentiment'].value_counts()
+        sentiment_labels = ['Positive', 'Negative']
+        sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
+        
+        # Create pie chart for sentiment distribution
+        sentiment_plot = px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution')
+        st.plotly_chart(sentiment_plot, use_container_width=True)
 
     with col2:
-        if not tweet_df.empty:
-            top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
-            if top_unigram:
-                # Extract words and counts for bar chart
-                words = [item[0] for item in top_unigram]
-                counts = [item[1] for item in top_unigram]
+        top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
+        if top_unigram:
+            # Extract words and counts for bar chart
+            words = [item[0] for item in top_unigram]
+            counts = [item[1] for item in top_unigram]
 
-                # Create bar chart for top occurring words
-                unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
-                st.plotly_chart(unigram_plot, use_container_width=True)
-            else:
-                st.write("No words to display.")
+            # Create bar chart for top occurring words
+            unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
+            st.plotly_chart(unigram_plot, use_container_width=True)
         else:
-            st.write("No data available to display top occurring words.") 
-            
+            st.write("No words to display.")
 
-    col1, col2 = st.columns([50, 50])
+    col1, col2 = st.columns(2)
     with col1:
-        if not tweet_df.empty:
-            bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
-            if bigrams:
-                bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
-                bigram_plot.update_layout(height=350)
-                st.plotly_chart(bigram_plot, use_container_width=True)
-            else:
-                st.write("No bigrams to display.")
+        bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
+        if bigrams:
+            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
+            bigram_plot.update_layout(height=350)
+            st.plotly_chart(bigram_plot, use_container_width=True)
         else:
-            st.write("No data available to display top occurring bigrams.")
+            st.write("No bigrams to display.") 
+            
 
 # Increase the font size of text inside the tabs
 adjust_tab_font = """

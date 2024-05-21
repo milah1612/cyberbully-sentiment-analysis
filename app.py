@@ -132,7 +132,7 @@ def make_dashboard(tweet_df, bar_color):
             words = [item[0] for item in top_unigram]
             counts = [item[1] for item in top_unigram]
             unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occuring Words', color_discrete_sequence=[bar_color])
-            st.plotly_chart(unigram_plot, use_container_width=True)
+            st.plotly_chart(unigram_plot, use_container_width=False)
         else:
             st.write("No words to display.") 
 
@@ -143,7 +143,7 @@ def make_dashboard(tweet_df, bar_color):
         if bigrams:
             bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title='Top 10 Occurring Bigrams', color_discrete_sequence=[bar_color])
             bigram_plot.update_layout(height=350)
-            st.plotly_chart(bigram_plot, use_container_width=True)
+            st.plotly_chart(bigram_plot, use_container_width=False)
         else:
             st.write("No bigrams to display.")
 

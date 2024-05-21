@@ -109,7 +109,8 @@ def make_dashboard(tweet_df, bar_color):
     # Center-align all components
     st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
-    # Display sentiment distribution
+    # Display sentiment distribution 
+    st.write("**Sentiment Label Count**")
     col1, col2 = st.columns(2)
     with col1:
         # Calculate sentiment counts and display in a DataFrame
@@ -149,7 +150,7 @@ def make_dashboard(tweet_df, bar_color):
     pd.options.display.max_colwidth = 1000  # Adjust the value as needed
 
     # Display sentiment and processed text table 
-    st.write("Sentiment and Processed Text")
+    st.write("**Sentiment and Processed Text**")
     st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
     
  

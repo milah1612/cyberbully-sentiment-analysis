@@ -110,11 +110,10 @@ def make_dashboard(tweet_df, bar_color):
     st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
     # Display sentiment distribution
-    st.write("### Sentiment Distribution")
+    st.write("### Sentiment Counts")
     col1, col2 = st.columns(2)
     with col1:
         sentiment_counts = tweet_df['Sentiment'].value_counts()
-        st.write("Sentiment Counts:")
         st.write(sentiment_counts) 
 
         sentiment_labels = ['Positive', 'Negative']

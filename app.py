@@ -101,7 +101,6 @@ def add_new_tweet(tweet_text, df):
 
     return updated_df
 
-# Function to make the dashboard
 def make_dashboard(tweet_df, bar_color):
     if tweet_df.empty:
         st.write("No data available to display.")
@@ -112,10 +111,19 @@ def make_dashboard(tweet_df, bar_color):
 
     col1, col2 = st.columns(2)
     with col1:
+        # Debug: Print the tweet_df DataFrame
+        st.write("Tweet DataFrame:")
+        st.dataframe(tweet_df)
+
         # Calculate sentiment counts for bar plot
         sentiment_counts = tweet_df['Sentiment'].value_counts()
+        st.write("Sentiment Counts:")
+        st.write(sentiment_counts)
+
         sentiment_labels = ['Positive', 'Negative']
         sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
+        st.write("Sentiment Values:")
+        st.write(sentiment_values)
         
         # Create bar plot for sentiment distribution
         fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_values, marker_color=bar_color)])

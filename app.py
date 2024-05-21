@@ -14,10 +14,7 @@ from io import StringIO
 from langdetect import detect
 from collections import Counter
 import plotly.express as px 
-import pathlib  
 import io
-
-
 
 # Function to load CSS file
 def local_css(file_path):
@@ -52,15 +49,13 @@ def predict_sentiment(text):
 
 # Function to check if text contains only English characters
 def is_english(text):
-    return all(ord(char) < 128 for char in text) 
-
+    return all(ord(char) < 128 for char in text)
 
 # Initialize session state
 if 'tweets' not in st.session_state:
     st.session_state.tweets = []
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=['Sentiment', 'tweet_text', 'Processed Text'])
-
 
 # Function to load data from a URL
 @st.experimental_singleton
@@ -82,15 +77,12 @@ def load_data(url):
         st.error(f"An unexpected error occurred: {ex}")
         return pd.DataFrame()  # Return empty DataFrame for any other exceptions   
 
-
 # URL of the CSV file hosted on GitHub
 csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'   
 
 # Load initial dataset into session state if it's empty
 if st.session_state.df.empty:
     st.session_state.df = load_data(csv_url)
-    st.write("DataFrame loaded into session state") 
-
 
 def add_new_tweet(tweet_text, df):
     # Predict sentiment and preprocess text
@@ -105,13 +97,7 @@ def add_new_tweet(tweet_text, df):
     
     # Update the session state DataFrame with the updated DataFrame
     st.session_state.df = updated_df
-    
-    # Display the status within the Streamlit interface
-    st.write("New tweet added successfully:")
-    st.write(new_row)
-    st.write("Updated DataFrame:")
-    st.write(updated_df)
-    
+
     return updated_df
 
 # Function to make the dashboard
@@ -127,8 +113,6 @@ def make_dashboard(tweet_df, bar_color):
             # Create pie chart for sentiment distribution
             sentiment_plot = px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution')
             st.plotly_chart(sentiment_plot, use_container_width=True)
-            st.write("Sentiment Counts:")
-            st.write(sentiment_counts)  # Display counts
 
         else:
             st.write("No data available to display sentiment distribution.")
@@ -144,9 +128,6 @@ def make_dashboard(tweet_df, bar_color):
                 # Create bar chart for top occurring words
                 unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
                 st.plotly_chart(unigram_plot, use_container_width=True)
-                st.write("Top 10 Occurring Words and Counts:")
-                for word, count in zip(words, counts):
-                    st.write(f"{word}: {count}")  # Display word and count
             else:
                 st.write("No words to display.")
         else:
@@ -156,10 +137,6 @@ def make_dashboard(tweet_df, bar_color):
     col1, col2 = st.columns([50, 50])
     with col1:
         if not tweet_df.empty:
-            # Debug print processed text
-            st.write("Processed Text:")
-            st.write(tweet_df['Processed Text'].tolist())
-            
             bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
             if bigrams:
                 bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
@@ -168,9 +145,7 @@ def make_dashboard(tweet_df, bar_color):
             else:
                 st.write("No bigrams to display.")
         else:
-            st.write("No data available to display top occurring bigrams.") 
-
-
+            st.write("No data available to display top occurring bigrams.")
 
 # Increase the font size of text inside the tabs
 adjust_tab_font = """
@@ -217,10 +192,6 @@ else:
 
 # Load the CSS file
 local_css("styles.css")
-
-# Display the DataFrame
-st.write("Current DataFrame:")
-st.write(st.session_state.df)
 
 # Sidebar configuration
 st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)

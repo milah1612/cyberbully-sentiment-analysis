@@ -123,15 +123,15 @@ def make_dashboard(tweet_df, bar_color):
         st.write(sentiment_values)
         
         # Create bar plot for sentiment distribution
-        fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_values, marker_color=bar_color)])
-        fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
+    fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_values, marker_color=bar_color)])
+    fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
 
-      # Print the figure details
-        print("Plotly Figure:")
-        print(fig_bar)
+    # Print the figure details
+    print("Plotly Figure:")
+    print(fig_bar)
 
-       # Plot the figure
-       st.plotly_chart(fig_bar, use_container_width=True)
+    # Plot the figure
+    st.plotly_chart(fig_bar, use_container_width=True)
 
     # Display top occurring words
     st.write("### Top 10 Occurring Words")

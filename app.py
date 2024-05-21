@@ -147,9 +147,14 @@ def make_dashboard(tweet_df, bar_color):
         else:
             st.write("No bigrams to display.")
 
-    # Display sentiment and processed text table
-    st.write("### Sentiment and Processed Text")
-    st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
+    # Set the display width for DataFrame columns
+   pd.options.display.max_colwidth = 1000  # Adjust the value as needed
+
+   # Define the title
+   title_sentiment_processed_text = "Sentiment and Processed Text"
+
+   # Display sentiment and processed text table
+   st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
     
  
 # Initialize session state

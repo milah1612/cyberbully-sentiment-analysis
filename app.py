@@ -14,7 +14,8 @@ from io import StringIO
 from langdetect import detect
 from collections import Counter
 import plotly.express as px 
-import io
+import io 
+import plotly.graph_objects as go
 
 # Function to load CSS file
 def local_css(file_path):
@@ -109,7 +110,12 @@ def make_dashboard(tweet_df, bar_color):
     # Center-align all components
     st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
+def make_dashboard(tweet_df, bar_color):
+    if tweet_df.empty:
+        st.write("No data available to display.")
+        return
+
+    col1, col2 = st.columns(2)
     with col1:
         # Calculate sentiment counts for bar plot
         sentiment_counts = tweet_df['Sentiment'].value_counts()
@@ -143,9 +149,6 @@ col1, col2 = st.columns(2)
             st.plotly_chart(bigram_plot, use_container_width=True)
         else:
             st.write("No bigrams to display.")
-    # Show table with sentiment and processed text
-    st.write("Table with Sentiment and Processed Text:")
-    st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
 
 # Initialize session state
 if 'df' not in st.session_state:

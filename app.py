@@ -110,11 +110,6 @@ def make_dashboard(tweet_df, bar_color):
     # Center-align all components
     st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
-def make_dashboard(tweet_df, bar_color):
-    if tweet_df.empty:
-        st.write("No data available to display.")
-        return
-
     col1, col2 = st.columns(2)
     with col1:
         # Calculate sentiment counts for bar plot

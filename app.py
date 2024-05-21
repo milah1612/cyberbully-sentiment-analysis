@@ -149,7 +149,7 @@ def make_dashboard(tweet_df, bar_color):
     pd.options.display.max_colwidth = 1000  # Adjust the value as needed
 
     # Display sentiment and processed text table 
-    st.markdown("### Sentiment and Processed Text")
+    st.write("Sentiment and Processed Text")
     st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
     
  

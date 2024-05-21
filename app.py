@@ -132,7 +132,6 @@ def make_dashboard(tweet_df, bar_color):
             st.write("No words to display.")
 
     # Display top occurring bigrams
-    st.write("### Top 10 Occurring Bigrams")
     col1, col2 = st.columns(2)
     with col1:
         bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)

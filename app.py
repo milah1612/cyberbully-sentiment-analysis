@@ -172,17 +172,27 @@ elif selected_tab == "Positive 😊":
     if "df" in st.session_state and not st.session_state.df.empty:
         tweet_df = st.session_state.df.query("Sentiment == 1")[["Sentiment", "Processed Text"]]
         st.write("### Positive Sentiment Analysis")
+        
+        # Print the filtered dataframe for positive sentiment analysis
+        st.write("Filtered DataFrame for Positive Sentiment:")
+        st.write(tweet_df)
+        
         make_dashboard(tweet_df, bar_color="#1F77B4")
     else:
         st.write("No positive tweets to display.")
 
-else:
+elif selected_tab == "Negative ☹️":
     if "df" in st.session_state and not st.session_state.df.empty:
         tweet_df = st.session_state.df.query("Sentiment == 0")[["Sentiment", "Processed Text"]]
         st.write("### Negative Sentiment Analysis")
+        
+        # Print the filtered dataframe for negative sentiment analysis
+        st.write("Filtered DataFrame for Negative Sentiment:")
+        st.write(tweet_df)
+        
         make_dashboard(tweet_df, bar_color="#FF7F0E")
     else:
-        st.write("No negative tweets to display.") 
+        st.write("No negative tweets to display.")
 
 # Load the CSS file
 local_css("styles.css")

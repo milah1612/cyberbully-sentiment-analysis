@@ -89,7 +89,7 @@ csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-anal
 # Load initial dataset into session state if it's empty
 if st.session_state.df.empty:
     st.session_state.df = load_data(csv_url)
-    print("DataFrame loaded into session state") 
+    st.write("DataFrame loaded into session state") 
 
 
 def add_new_tweet(tweet_text, df):
@@ -106,54 +106,13 @@ def add_new_tweet(tweet_text, df):
     # Update the session state DataFrame with the updated DataFrame
     st.session_state.df = updated_df
     
-    # Debug print statements (optional)
-    print("New tweet added successfully:")
-    print(new_row)
-    print("Updated DataFrame:")
-    print(updated_df)
+    # Display the status within the Streamlit interface
+    st.write("New tweet added successfully:")
+    st.write(new_row)
+    st.write("Updated DataFrame:")
+    st.write(updated_df)
     
     return updated_df
-
-# Load the CSS file
-local_css("styles.css")
-
-# Streamlit app
-# Sidebar configuration
-st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)
-st.sidebar.title("TWITTER SENTIMENT ANALYSIS")
-st.sidebar.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
-
-# Add search parameter/tweet box
-user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment analysis:", height=200)
-
-# Analyze sentiment button in the sidebar
-if st.sidebar.button("Analyze Sentiment"):
-    if user_input:
-        try:
-            detected_language = detect(user_input)
-            if detected_language != 'en':
-                st.sidebar.write("Please enter text in English.")
-            else:
-                prediction = predict_sentiment(user_input)
-                processed_text = preprocess_text(user_input)
-
-                # Display the prediction result in the sidebar
-                st.sidebar.subheader("Analysis Result")
-                st.sidebar.write(f"Processed Text: {processed_text}")
-
-                if prediction == 1:
-                    st.sidebar.write("Sentiment: Positive")
-                elif prediction == 0:
-                    st.sidebar.write("Sentiment: Negative")
-                else:
-                    st.sidebar.write(f"Sentiment: {prediction}")
-
-                # Add the new tweet to the dataset
-                add_new_tweet(user_input, st.session_state.df)
-        except Exception as e:
-            st.sidebar.write("An error occurred. Please try again.")
-    else:
-        st.sidebar.write("Please enter some text.")
 
 # Function to make the dashboard
 def make_dashboard(tweet_df, bar_color):
@@ -254,4 +213,48 @@ else:
         st.write("### Negative Sentiment Analysis")
         make_dashboard(tweet_df, bar_color="#FF7F0E")
     else:
-        st.write("No negative tweets to display.")
+        st.write("No negative tweets to display.") 
+
+# Load the CSS file
+local_css("styles.css")
+
+# Display the DataFrame
+st.write("Current DataFrame:")
+st.write(st.session_state.df)
+
+# Sidebar configuration
+st.sidebar.image("twitter_icon.png", width=200, output_format='png', use_column_width=False)
+st.sidebar.title("TWITTER SENTIMENT ANALYSIS")
+st.sidebar.write("This application performs sentiment analysis on the latest tweets based on the entered search term. The application can only predict positive or negative sentiment, and only English tweets are supported.")
+
+# Add search parameter/tweet box
+user_input = st.sidebar.text_area("Enter the search term or tweet for sentiment analysis:", height=200)
+
+# Analyze sentiment button in the sidebar
+if st.sidebar.button("Analyze Sentiment"):
+    if user_input:
+        try:
+            detected_language = detect(user_input)
+            if detected_language != 'en':
+                st.sidebar.write("Please enter text in English.")
+            else:
+                prediction = predict_sentiment(user_input)
+                processed_text = preprocess_text(user_input)
+
+                # Display the prediction result in the sidebar
+                st.sidebar.subheader("Analysis Result")
+                st.sidebar.write(f"Processed Text: {processed_text}")
+
+                if prediction == 1:
+                    st.sidebar.write("Sentiment: Positive")
+                elif prediction == 0:
+                    st.sidebar.write("Sentiment: Negative")
+                else:
+                    st.sidebar.write(f"Sentiment: {prediction}")
+
+                # Add the new tweet to the dataset
+                add_new_tweet(user_input, st.session_state.df)
+        except Exception as e:
+            st.sidebar.write(f"An error occurred: {e}")
+    else:
+        st.sidebar.write("Please enter some text.")

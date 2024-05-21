@@ -115,7 +115,12 @@ def make_dashboard(tweet_df, bar_color):
     with col1:
         sentiment_counts = tweet_df['Sentiment'].value_counts()
         st.write("Sentiment Counts:")
-        st.write(sentiment_counts)
+        st.write(sentiment_counts) 
+
+        sentiment_labels = ['Positive', 'Negative']
+        sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
+        st.write("Sentiment Values:")
+        st.write(sentiment_values)
         
         # Create bar plot for sentiment distribution
         fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_counts, marker_color=bar_color)])

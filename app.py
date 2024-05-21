@@ -106,8 +106,8 @@ def make_dashboard(tweet_df, bar_color):
         st.write("No data available to display.")
         return
 
-    # Header
-    st.header("Dashboard")
+    # Center-align all components
+    st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
     # Calculate sentiment counts for pie chart
     sentiment_counts = tweet_df['Sentiment'].value_counts()
@@ -115,25 +115,21 @@ def make_dashboard(tweet_df, bar_color):
     sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
     
     # Create pie chart for sentiment distribution
-    sentiment_plot = px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution')
-    st.plotly_chart(sentiment_plot, use_container_width=True)
+    st.plotly_chart(px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution'), use_container_width=True)
 
     # Top occurring words
     top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
     if top_unigram:
         words = [item[0] for item in top_unigram]
         counts = [item[1] for item in top_unigram]
-        unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
-        st.plotly_chart(unigram_plot, use_container_width=True)
+        st.plotly_chart(px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color]), use_container_width=True)
     else:
         st.write("No words to display.")
 
     # Top occurring bigrams
     bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
     if bigrams:
-        bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
-        bigram_plot.update_layout(height=350)
-        st.plotly_chart(bigram_plot, use_container_width=True)
+        st.plotly_chart(px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color]), use_container_width=True)
     else:
         st.write("No bigrams to display.") 
 
@@ -141,7 +137,13 @@ def make_dashboard(tweet_df, bar_color):
     st.write("Table with Sentiment and Processed Text:")
     st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
 
-            
+# Initialize session state
+if 'df' not in st.session_state:
+    st.session_state.df = pd.DataFrame(columns=['Sentiment', 'Processed Text'])
+
+# Load initial dataset into session state if it's empty
+if st.session_state.df.empty:
+    st.session_state.df = load_data(csv_url)
 
 # Increase the font size of text inside the tabs
 adjust_tab_font = """
@@ -153,48 +155,8 @@ button[data-baseweb="tab"] > div[data-testid="stMarkdownContainer"] > p {
 """
 st.write(adjust_tab_font, unsafe_allow_html=True)
 
-# Get the current page URL and parameters
-params = st.experimental_get_query_params()
-
-# Set the default tab if no tab parameter is provided
-selected_tab = params.get("tab", ["All"])[0]
-
-# Create a radio button widget to select the sentiment tab
-selected_tab = st.radio("Select sentiment:", ["All", "Positive 😊", "Negative ☹️"])
-
-# Display content based on the selected tab
-if selected_tab == "All":
-    if "df" in st.session_state and not st.session_state.df.empty:
-        tweet_df = st.session_state.df
-        st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
-    else:
-        st.write("No tweets to display.")
-
-elif selected_tab == "Positive 😊":
-    if "df" in st.session_state and not st.session_state.df.empty:
-        tweet_df = st.session_state.df.query("Sentiment == 1")[["Sentiment", "Processed Text"]]
-        st.write("### Positive Sentiment Analysis")
-        
-        # Print the entire dataframe for positive sentiment analysis
-        st.write("Filtered DataFrame for Positive Sentiment:")
-        st.write(tweet_df)
-        
-        make_dashboard(tweet_df, bar_color="#1F77B4")
-    else:
-        st.write("No positive tweets to display.")
-
-elif selected_tab == "Negative ☹️":
-    if "df" in st.session_state and not st.session_state.df.empty:
-        tweet_df = st.session_state.df.query("Sentiment == 0")[["Sentiment", "Processed Text"]]
-        st.write("### Negative Sentiment Analysis")
-        
-        # Print the entire dataframe for negative sentiment analysis
-        st.write("Filtered DataFrame for Negative Sentiment:")
-        st.write(tweet_df)
-        
-        make_dashboard(tweet_df, bar_color="#FF7F0E")
-    else:
-        st.write("No negative tweets to display.")
+# Call make_dashboard function
+make_dashboard(st.session_state.df, bar_color="#1F77B4")
 
 # Load the CSS file
 local_css("styles.css")

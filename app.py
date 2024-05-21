@@ -79,7 +79,7 @@ def load_data(url):
         return pd.DataFrame()  # Return empty DataFrame for any other exceptions   
 
 # URL of the CSV file hosted on GitHub
-csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'   
+csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv?token=GHSAT0AAAAAACSQ2QUHF52SGNEBTKTUQIKGZSMBNWQ'   
 
 # Load initial dataset into session state if it's empty
 if "df" not in st.session_state or st.session_state.df.empty:

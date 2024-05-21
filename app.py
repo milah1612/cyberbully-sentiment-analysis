@@ -123,7 +123,7 @@ def make_dashboard(tweet_df, bar_color):
         st.write(sentiment_values)
         
         # Create bar plot for sentiment distribution
-        fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_values, marker_color=bar_color)])
+        fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_counts, marker_color=bar_color)])
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
 
         # Plot the figure

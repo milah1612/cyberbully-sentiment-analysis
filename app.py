@@ -122,14 +122,14 @@ def make_dashboard(tweet_df, bar_color):
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
         st.plotly_chart(fig_bar, use_container_width=True)    
 
-        # Display top occurring words
+    # Display top occurring words
     with col2:
         top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
         if top_unigram:
             words = [item[0] for item in top_unigram]
             counts = [item[1] for item in top_unigram]
-            unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color=bar_color)
-            unigram_plot.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
+            unigram_plot = px.bar(x=words, y=counts, color=bar_color)
+            unigram_plot.update_layout(title='Top 10 Occurring Words', plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
             st.plotly_chart(unigram_plot, use_container_width=False)
         else:
             st.write("No words to display.") 
@@ -140,8 +140,8 @@ def make_dashboard(tweet_df, bar_color):
     with col1:
         bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
         if bigrams:
-            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title='Top 10 Occurring Bigrams', color=bar_color)
-            bigram_plot.update_layout(height=350, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
+            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], color=bar_color)
+            bigram_plot.update_layout(title='Top 10 Occurring Bigrams', height=350, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color="#333"))
             st.plotly_chart(bigram_plot, use_container_width=False)
         else:
             st.write("No bigrams to display.")

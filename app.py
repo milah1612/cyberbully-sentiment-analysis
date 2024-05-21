@@ -106,39 +106,41 @@ def make_dashboard(tweet_df, bar_color):
         st.write("No data available to display.")
         return
 
-    col1, col2 = st.columns(2)
-    with col1:
-        # Calculate sentiment counts for pie chart
-        sentiment_counts = tweet_df['Sentiment'].value_counts()
-        sentiment_labels = ['Positive', 'Negative']
-        sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
-        
-        # Create pie chart for sentiment distribution
-        sentiment_plot = px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution')
-        st.plotly_chart(sentiment_plot, use_container_width=True)
+    # Header
+    st.header("Dashboard")
 
-    with col2:
-        top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
-        if top_unigram:
-            # Extract words and counts for bar chart
-            words = [item[0] for item in top_unigram]
-            counts = [item[1] for item in top_unigram]
+    # Calculate sentiment counts for pie chart
+    sentiment_counts = tweet_df['Sentiment'].value_counts()
+    sentiment_labels = ['Positive', 'Negative']
+    sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
+    
+    # Create pie chart for sentiment distribution
+    sentiment_plot = px.pie(names=sentiment_labels, values=sentiment_values, title='Sentiment Distribution')
+    st.plotly_chart(sentiment_plot, use_container_width=True)
 
-            # Create bar chart for top occurring words
-            unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
-            st.plotly_chart(unigram_plot, use_container_width=True)
-        else:
-            st.write("No words to display.")
+    # Top occurring words
+    top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
+    if top_unigram:
+        words = [item[0] for item in top_unigram]
+        counts = [item[1] for item in top_unigram]
+        unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
+        st.plotly_chart(unigram_plot, use_container_width=True)
+    else:
+        st.write("No words to display.")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
-        if bigrams:
-            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
-            bigram_plot.update_layout(height=350)
-            st.plotly_chart(bigram_plot, use_container_width=True)
-        else:
-            st.write("No bigrams to display.") 
+    # Top occurring bigrams
+    bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
+    if bigrams:
+        bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title="Top 10 Occurring Bigrams", color_discrete_sequence=[bar_color])
+        bigram_plot.update_layout(height=350)
+        st.plotly_chart(bigram_plot, use_container_width=True)
+    else:
+        st.write("No bigrams to display.") 
+
+    # Show table with sentiment and processed text
+    st.write("Table with Sentiment and Processed Text:")
+    st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
+
             
 
 # Increase the font size of text inside the tabs

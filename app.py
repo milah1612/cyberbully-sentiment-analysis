@@ -165,6 +165,10 @@ if selected_tab == "All":
     if "df" in st.session_state and not st.session_state.df.empty:
         tweet_df = st.session_state.df
         st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
+        
+        # Print unique values of the "Sentiment" column for the entire dataframe
+        st.write("Unique Sentiment Values:")
+        st.write(tweet_df["Sentiment"].unique())
     else:
         st.write("No tweets to display.")
 
@@ -173,8 +177,8 @@ elif selected_tab == "Positive 😊":
         tweet_df = st.session_state.df.query("Sentiment == 1")[["Sentiment", "Processed Text"]]
         st.write("### Positive Sentiment Analysis")
         
-        # Print unique values of the "Sentiment" column
-        st.write("Unique Sentiment Values:")
+        # Print unique values of the "Sentiment" column for positive sentiment
+        st.write("Unique Sentiment Values (Positive):")
         st.write(tweet_df["Sentiment"].unique())
         
         # Print the entire dataframe for positive sentiment analysis
@@ -190,8 +194,8 @@ elif selected_tab == "Negative ☹️":
         tweet_df = st.session_state.df.query("Sentiment == 0")[["Sentiment", "Processed Text"]]
         st.write("### Negative Sentiment Analysis")
         
-        # Print unique values of the "Sentiment" column
-        st.write("Unique Sentiment Values:")
+        # Print unique values of the "Sentiment" column for negative sentiment
+        st.write("Unique Sentiment Values (Negative):")
         st.write(tweet_df["Sentiment"].unique())
         
         # Print the entire dataframe for negative sentiment analysis

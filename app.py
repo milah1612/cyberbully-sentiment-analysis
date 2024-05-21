@@ -109,27 +109,23 @@ def make_dashboard(tweet_df, bar_color):
     # Center-align all components
     st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
-    # Display sentiment distribution
-    st.write("### Sentiment Distribution")
-    col1, col2 = st.columns(2)
-    with col1:
-        sentiment_counts = tweet_df['Sentiment'].value_counts()
-        st.write("Sentiment Counts:")
-        st.write(sentiment_counts)
+# Display sentiment distribution
+st.write("### Sentiment Distribution")
+col1, col2 = st.columns(2)
+with col1:
+    sentiment_counts = tweet_df['Sentiment'].value_counts()
+    st.write("Sentiment Counts:")
+    st.write(sentiment_counts)
 
-        sentiment_labels = ['Positive', 'Negative']
-        sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
-        st.write("Sentiment Values:")
-        st.write(sentiment_values)
-        
-        # Create bar plot for sentiment distribution
-    fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_values, marker_color=bar_color)])
-    fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
+    sentiment_labels = ['Positive', 'Negative']
+    sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
+    st.write("Sentiment Values:")
+    st.write(sentiment_values)
 
-    # Print the figure details
-    print("Plotly Figure:")
-    print(fig_bar)
-
+    # Create horizontal bar plot for sentiment distribution
+    fig_bar = go.Figure(data=[go.Bar(y=sentiment_labels, x=sentiment_values, orientation='h', marker_color=bar_color)])
+    fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Count', yaxis_title='Sentiment')
+    
     # Plot the figure
     st.plotly_chart(fig_bar, use_container_width=True)
 

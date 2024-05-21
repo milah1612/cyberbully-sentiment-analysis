@@ -109,40 +109,31 @@ def make_dashboard(tweet_df, bar_color):
     # Center-align all components
     st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
 
+    # Display sentiment distribution
+    st.write("### Sentiment Distribution")
     col1, col2 = st.columns(2)
     with col1:
-        # Debug: Print the tweet_df DataFrame
-        st.write("Tweet DataFrame:")
-        st.dataframe(tweet_df)
-
-        # Calculate sentiment counts for bar plot
         sentiment_counts = tweet_df['Sentiment'].value_counts()
-        st.write("Sentiment Counts:")
-        st.write(sentiment_counts)
-
         sentiment_labels = ['Positive', 'Negative']
         sentiment_values = [sentiment_counts.get(label, 0) for label in sentiment_labels]
-        st.write("Sentiment Values:")
-        st.write(sentiment_values)
-        
-        # Create bar plot for sentiment distribution
         fig_bar = go.Figure(data=[go.Bar(x=sentiment_labels, y=sentiment_values, marker_color=bar_color)])
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
         st.plotly_chart(fig_bar, use_container_width=True)
 
+    # Display top occurring words
+    st.write("### Top 10 Occurring Words")
     with col2:
         top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
         if top_unigram:
-            # Extract words and counts for bar chart
             words = [item[0] for item in top_unigram]
             counts = [item[1] for item in top_unigram]
-
-            # Create bar chart for top occurring words
             unigram_plot = px.bar(x=words, y=counts, title="Top 10 Occurring Words", color_discrete_sequence=[bar_color])
             st.plotly_chart(unigram_plot, use_container_width=True)
         else:
             st.write("No words to display.")
 
+    # Display top occurring bigrams
+    st.write("### Top 10 Occurring Bigrams")
     col1, col2 = st.columns(2)
     with col1:
         bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
@@ -151,10 +142,10 @@ def make_dashboard(tweet_df, bar_color):
             bigram_plot.update_layout(height=350)
             st.plotly_chart(bigram_plot, use_container_width=True)
         else:
-            st.write("No bigrams to display.")   
-            
-    # Display the DataFrame containing sentiment and processed text
-    st.write("Sentiment and Processed Text:")
+            st.write("No bigrams to display.")
+
+    # Display sentiment and processed text table
+    st.write("### Sentiment and Processed Text")
     st.dataframe(tweet_df[["Sentiment", "Processed Text"]])
 
  

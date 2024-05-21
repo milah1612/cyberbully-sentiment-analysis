@@ -122,32 +122,30 @@ def make_dashboard(tweet_df, bar_color):
         fig_bar.update_layout(title='Sentiment Distribution', xaxis_title='Sentiment', yaxis_title='Count')
         st.plotly_chart(fig_bar, use_container_width=True)    
 
-
-# Display top occurring words
-  col1, col2 = st.columns(2)
-  with col2:
-    # Calculate top occurring unigrams and display in a bar plot
-    top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
-    if top_unigram:
-        words = [item[0] for item in top_unigram]
-        counts = [item[1] for item in top_unigram]
-        unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color_discrete_sequence=[bar_color], xaxis_title='Words', yaxis_title='Count')
-        st.plotly_chart(unigram_plot, use_container_width=False)
-    else:
-        st.write("No words to display.") 
+    # Display top occurring words
+    with col2:
+        # Calculate top occurring unigrams and display in a bar plot
+        top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
+        if top_unigram:
+            words = [item[0] for item in top_unigram]
+            counts = [item[1] for item in top_unigram]
+            unigram_plot = px.bar(x=words, y=counts, title='Top 10 Occurring Words', color_discrete_sequence=[bar_color], xaxis_title='Words', yaxis_title='Count')
+            st.plotly_chart(unigram_plot, use_container_width=False)
+        else:
+            st.write("No words to display.") 
 
     # Display top occurring bigrams
-   col1, col2 = st.columns(2)
-   with col1:
-    # Calculate top occurring bigrams and display in a bar plot
-    bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
-    if bigrams:
-        bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title='Top 10 Occurring Bigrams', color_discrete_sequence=[bar_color])
-        bigram_plot.update_layout(xaxis_title='Bi-Words', yaxis_title='Count')  # Add axis titles
-        bigram_plot.update_layout(height=350)
-        st.plotly_chart(bigram_plot, use_container_width=False)
-    else:
-        st.write("No bigrams to display.") 
+    col1, col2 = st.columns(2)
+    with col1:
+        # Calculate top occurring bigrams and display in a bar plot
+        bigrams = Counter([" ".join(item) for item in zip(tweet_df['Processed Text'].str.split().explode(), tweet_df['Processed Text'].str.split().explode().shift(-1)) if item[1] is not None]).most_common(10)
+        if bigrams:
+            bigram_plot = px.bar(x=[item[0] for item in bigrams], y=[item[1] for item in bigrams], title='Top 10 Occurring Bigrams', color_discrete_sequence=[bar_color])
+            bigram_plot.update_layout(xaxis_title='Bi-Words', yaxis_title='Count')  # Add axis titles
+            bigram_plot.update_layout(height=350)
+            st.plotly_chart(bigram_plot, use_container_width=False)
+        else:
+            st.write("No bigrams to display.") 
 
     # Set the display width for DataFrame columns
     pd.options.display.max_colwidth = 1000  # Adjust the value as needed

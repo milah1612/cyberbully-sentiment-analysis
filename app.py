@@ -81,7 +81,7 @@ def load_data(url):
 csv_url = 'https://raw.githubusercontent.com/milah1612/cyberbully-sentiment-analysis/main/tweets.csv'   
 
 # Load initial dataset into session state if it's empty
-if st.session_state.df.empty:
+if "df" not in st.session_state or st.session_state.df.empty:
     st.session_state.df = load_data(csv_url)
 
 def add_new_tweet(tweet_text, df):

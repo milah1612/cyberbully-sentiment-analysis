@@ -121,7 +121,6 @@ def make_dashboard(tweet_df, bar_color):
         st.plotly_chart(fig_bar, use_container_width=True)
 
     # Display top occurring words
-    st.write("### Top 10 Occurring Words")
     with col2:
         top_unigram = Counter(" ".join(tweet_df['Processed Text']).split()).most_common(10)
         if top_unigram:

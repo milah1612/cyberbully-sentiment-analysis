@@ -107,7 +107,7 @@ def make_dashboard(tweet_df, bar_color):
         return
 
     # Center-align all components
-    st.markdown("<h1 style='text-align: center;'>Dashboard</h1>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>Sentiment Analysis Dashboard</h2>", unsafe_allow_html=True)
 
     # Display sentiment distribution 
     st.write("**Sentiment Label Count**")
